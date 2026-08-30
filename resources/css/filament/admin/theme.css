@@ -1,0 +1,487 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+@theme {
+    --font-sans: 'Segoe UI Variable', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+    --merlin-navy: #102a43;
+    --merlin-navy-deep: #081d2d;
+    --merlin-petrol: #0f766e;
+    --merlin-mint: #ccfbf1;
+    --merlin-surface: #f4f8f9;
+    --merlin-border: #dbe7e9;
+    --merlin-muted: #5f7380;
+    --merlin-radius-sm: 0.75rem;
+    --merlin-radius-md: 1rem;
+    --merlin-radius-lg: 1.5rem;
+    --merlin-shadow: 0 18px 55px -35px rgb(8 29 45 / 0.45);
+}
+
+.fi-body {
+    background:
+        radial-gradient(circle at 85% 0%, rgb(204 251 241 / 0.5), transparent 28rem),
+        var(--merlin-surface);
+    color: var(--merlin-navy-deep);
+}
+
+.fi-main {
+    padding-block: 2rem 3rem;
+}
+
+.fi-topbar {
+    min-height: 4.5rem;
+    border-bottom: 1px solid rgb(219 231 233 / 0.8);
+    background: rgb(255 255 255 / 0.88);
+    box-shadow: 0 12px 35px -30px rgb(8 29 45 / 0.75);
+    backdrop-filter: blur(18px);
+}
+
+.fi-sidebar {
+    background: linear-gradient(180deg, var(--merlin-navy-deep) 0%, var(--merlin-navy) 62%, #123d4a 100%);
+    color: white;
+}
+
+:not(.fi-body-has-topbar) .fi-sidebar-header,
+.fi-sidebar-header {
+    min-height: 5.25rem;
+    padding-inline: 1.25rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.fi-sidebar-nav {
+    padding: 1.25rem 1rem;
+}
+
+.fi-sidebar-group-label {
+    color: rgb(204 251 241 / 0.58);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.fi-sidebar-item-btn {
+    min-height: 2.85rem;
+    border-radius: var(--merlin-radius-sm);
+    padding-inline: 0.85rem;
+}
+
+.fi-sidebar-item-label,
+.fi-sidebar-item-btn > .fi-icon {
+    color: rgb(255 255 255 / 0.72);
+}
+
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible {
+    background: rgb(255 255 255 / 0.09);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background: rgb(45 212 191 / 0.16);
+    box-shadow: inset 3px 0 0 #5eead4;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: white;
+}
+
+.fi-btn {
+    min-height: 2.7rem;
+    border-radius: var(--merlin-radius-sm);
+    font-weight: 650;
+}
+
+.fi-section,
+.fi-ta-ctn,
+.fi-fo-field-wrp > .fi-input-wrp {
+    border-radius: var(--merlin-radius-md);
+}
+
+.fi-section:not(.fi-section-not-contained):not(.fi-aside),
+.fi-ta-ctn {
+    border: 1px solid rgb(219 231 233 / 0.8);
+    box-shadow: var(--merlin-shadow);
+}
+
+.fi-simple-layout {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(125deg, rgb(8 29 45 / 0.97), rgb(15 118 110 / 0.9)),
+        var(--merlin-navy-deep);
+}
+
+.fi-simple-layout::before,
+.fi-simple-layout::after {
+    position: absolute;
+    border-radius: 999px;
+    content: '';
+    pointer-events: none;
+}
+
+.fi-simple-layout::before {
+    width: 34rem;
+    height: 34rem;
+    top: -17rem;
+    right: -8rem;
+    border: 1px solid rgb(255 255 255 / 0.13);
+    box-shadow: 0 0 0 5rem rgb(255 255 255 / 0.025), 0 0 0 10rem rgb(255 255 255 / 0.02);
+}
+
+.fi-simple-layout::after {
+    width: 20rem;
+    height: 20rem;
+    bottom: -12rem;
+    left: -7rem;
+    background: rgb(94 234 212 / 0.16);
+    filter: blur(1px);
+}
+
+.fi-simple-main-ctn {
+    z-index: 1;
+    padding: 1.5rem;
+}
+
+.fi-simple-main {
+    border: 1px solid rgb(255 255 255 / 0.7);
+    border-radius: var(--merlin-radius-lg);
+    background: rgb(255 255 255 / 0.96);
+    box-shadow: 0 35px 90px -38px rgb(0 0 0 / 0.65);
+    backdrop-filter: blur(18px);
+}
+
+.fi-simple-header-heading {
+    color: var(--merlin-navy-deep);
+    font-size: 1.65rem;
+    letter-spacing: -0.035em;
+}
+
+.fi-simple-header-subheading {
+    color: var(--merlin-muted);
+    line-height: 1.6;
+}
+
+.merlin-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: inherit;
+}
+
+.fi-simple-main .merlin-brand {
+    color: var(--merlin-petrol);
+}
+
+.fi-sidebar .merlin-brand {
+    color: #5eead4;
+}
+
+.merlin-brand__mark {
+    display: inline-flex;
+    width: 2.55rem;
+    height: 2.55rem;
+    flex: none;
+}
+
+.merlin-brand__copy {
+    display: grid;
+    line-height: 1.05;
+}
+
+.merlin-brand__copy strong {
+    color: currentColor;
+    font-size: 1.12rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.merlin-brand__copy small {
+    margin-top: 0.3rem;
+    color: var(--merlin-muted);
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.fi-sidebar .merlin-brand__copy small {
+    color: rgb(255 255 255 / 0.48);
+}
+
+.merlin-welcome,
+.merlin-progress,
+.merlin-dashboard-card {
+    border: 1px solid rgb(219 231 233 / 0.9);
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: var(--merlin-shadow);
+}
+
+.merlin-welcome {
+    position: relative;
+    display: flex;
+    min-height: 14rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--merlin-radius-lg);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    color: white;
+    background:
+        radial-gradient(circle at 86% 18%, rgb(94 234 212 / 0.35), transparent 18rem),
+        linear-gradient(125deg, var(--merlin-navy-deep), #124f55);
+}
+
+.merlin-welcome::after {
+    position: absolute;
+    width: 18rem;
+    height: 18rem;
+    top: -10rem;
+    right: -5rem;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: 999px;
+    box-shadow: 0 0 0 3.5rem rgb(255 255 255 / 0.035);
+    content: '';
+}
+
+.merlin-welcome__content {
+    position: relative;
+    z-index: 1;
+    max-width: 45rem;
+}
+
+.merlin-eyebrow {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: #5eead4;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.merlin-welcome h2 {
+    font-size: clamp(1.75rem, 4vw, 2.7rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+}
+
+.merlin-welcome p {
+    max-width: 40rem;
+    margin-top: 0.9rem;
+    color: rgb(255 255 255 / 0.68);
+    line-height: 1.65;
+}
+
+.merlin-welcome__status {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    padding: 0.65rem 0.9rem;
+    background: rgb(255 255 255 / 0.08);
+    color: rgb(255 255 255 / 0.84);
+    font-size: 0.78rem;
+    font-weight: 650;
+}
+
+.merlin-status-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: #5eead4;
+    box-shadow: 0 0 0 0.28rem rgb(94 234 212 / 0.15);
+}
+
+.merlin-progress {
+    margin-top: 1.25rem;
+    border-radius: var(--merlin-radius-lg);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.merlin-section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.merlin-section-heading .merlin-eyebrow {
+    color: var(--merlin-petrol);
+}
+
+.merlin-section-heading h2 {
+    color: var(--merlin-navy-deep);
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+}
+
+.merlin-progress__counter,
+.merlin-dashboard-card__state {
+    border-radius: 999px;
+    background: var(--merlin-mint);
+    color: #115e59;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.merlin-progress__counter {
+    padding: 0.45rem 0.75rem;
+}
+
+.merlin-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.merlin-step {
+    display: flex;
+    gap: 0.75rem;
+    border: 1px solid var(--merlin-border);
+    border-radius: var(--merlin-radius-md);
+    padding: 1rem;
+    background: #f9fbfb;
+}
+
+.merlin-step.is-current {
+    border-color: rgb(15 118 110 / 0.28);
+    background: rgb(204 251 241 / 0.36);
+}
+
+.merlin-step__number {
+    display: grid;
+    width: 1.8rem;
+    height: 1.8rem;
+    flex: none;
+    place-items: center;
+    border-radius: 0.6rem;
+    background: white;
+    color: var(--merlin-petrol);
+    box-shadow: 0 0 0 1px var(--merlin-border);
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.merlin-step strong,
+.merlin-step small {
+    display: block;
+}
+
+.merlin-step strong {
+    color: var(--merlin-navy-deep);
+    font-size: 0.86rem;
+}
+
+.merlin-step small {
+    margin-top: 0.25rem;
+    color: var(--merlin-muted);
+    font-size: 0.75rem;
+    line-height: 1.45;
+}
+
+.merlin-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.merlin-dashboard-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    border-radius: var(--merlin-radius-md);
+    padding: 1.25rem;
+}
+
+.merlin-dashboard-card__icon {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.8rem;
+    background: var(--merlin-mint);
+    color: var(--merlin-petrol);
+    font-weight: 800;
+}
+
+.merlin-dashboard-card h3 {
+    color: var(--merlin-navy-deep);
+    font-size: 0.95rem;
+    font-weight: 750;
+}
+
+.merlin-dashboard-card p {
+    margin-top: 0.35rem;
+    color: var(--merlin-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+.merlin-dashboard-card__state {
+    grid-column: 2;
+    width: fit-content;
+    padding: 0.35rem 0.6rem;
+}
+
+@media (max-width: 1023px) {
+    .merlin-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .merlin-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 639px) {
+    .fi-main {
+        padding-block: 1rem 2rem;
+    }
+
+    .fi-simple-main {
+        padding: 2.25rem 1.5rem;
+    }
+
+    .merlin-brand__copy small {
+        display: none;
+    }
+
+    .merlin-welcome {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .merlin-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .merlin-progress__counter {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

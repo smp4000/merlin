@@ -1,0 +1,674 @@
+{
+  "schema_version": 1,
+  "catalog": "fuel-station-brands-dach",
+  "verified_at": "2026-08-30",
+  "countries": ["DE", "AT", "CH"],
+  "sources": [
+    {
+      "id": "de-eid-2025",
+      "country": "DE",
+      "title": "Branchenstudie Tankstellenmarkt 2024, Tabellen 3-1 und 3-2",
+      "publisher": "Prof. Schramm-Klein & Partner / Sprit+",
+      "effective_at": "2024-12-31",
+      "url": "https://www.sprit-plus.de/downloadfile/3669939/tankstellenmarkt-2024.pdf"
+    },
+    {
+      "id": "at-wko-2025",
+      "country": "AT",
+      "title": "Tankstellenstatistik 2025",
+      "publisher": "Wirtschaftskammer Österreich, FVEK",
+      "effective_at": "2025-12-31",
+      "url": "https://www.wko.at/industrie/energierohstoff-kraftstoff/tankstellenstatistik"
+    },
+    {
+      "id": "ch-avenergy-2025",
+      "country": "CH",
+      "title": "Öffentlich zugängliche Markentankstellen am 1. Januar 2026",
+      "publisher": "Avenergy Suisse",
+      "effective_at": "2026-01-01",
+      "url": "https://avenergy.ch/images/pdf/Medienmitteilungen/Tankstellenstatistik%202025.pdf"
+    }
+  ],
+  "brands": [
+    {
+      "slug": "agrola",
+      "name": "AGROLA",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "allguth",
+      "name": "Allguth",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "ap",
+      "name": "AP",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "aral",
+      "name": "Aral",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke von bp in Deutschland.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "avanti",
+      "name": "Avanti",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke der OMV-Gruppe.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "avia",
+      "name": "AVIA",
+      "countries": ["DE", "AT", "CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke mit Netzen in Deutschland, Österreich und der Schweiz.",
+      "source_ids": ["de-eid-2025", "at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "bavaria-petrol",
+      "name": "Bavaria Petrol",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "baywa",
+      "name": "BayWa",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke mit Schwerpunkt auf Automatentankstellen.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "bft",
+      "name": "bft",
+      "countries": ["DE"],
+      "aliases": ["Bundesverband Freier Tankstellen"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Gemeinsamer Markenauftritt freier Tankstellen in Deutschland; einzelne Eigenmarken bleiben zusätzlich möglich.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "bp",
+      "name": "bp",
+      "countries": ["AT", "CH"],
+      "aliases": ["BP"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Österreich und der Schweiz; in Deutschland wird das Netz unter Aral geführt.",
+      "source_ids": ["at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "calpam",
+      "name": "Calpam",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "circle-k",
+      "name": "Circle K",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Betreiber- und künftiger Markenauftritt des früheren deutschen TotalEnergies-Netzes; TotalEnergies bleibt während der Umstellung separat auswählbar.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "classic",
+      "name": "CLASSIC",
+      "countries": ["DE"],
+      "aliases": ["Lühmann"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke der Lühmann-Gruppe.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "combustia",
+      "name": "COMBUSTIA",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "coop",
+      "name": "Coop",
+      "countries": ["CH"],
+      "aliases": ["Coop Pronto"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke; Coop Pronto wird als Alias für den Shop-/Standortauftritt geführt.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "direct",
+      "name": "Direct",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "disk",
+      "name": "Disk",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "diskont",
+      "name": "DISKONT",
+      "countries": ["AT"],
+      "aliases": ["DISKONT am HOFER Parkplatz", "HOFER Tankstelle"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Diskont-Tankstellen an HOFER-Standorten.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "enilive",
+      "name": "Enilive",
+      "countries": ["DE", "AT", "CH"],
+      "aliases": ["Enilive Suisse", "Eni", "Agip"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Aktueller Markenauftritt der Eni-Mobilitätsaktivitäten; Eni und Agip werden für Bestandsdaten als Aliase geführt.",
+      "source_ids": ["de-eid-2025", "at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "esso",
+      "name": "Esso",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Deutschland.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "f-leitner",
+      "name": "F. Leitner",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische regionale Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "genol",
+      "name": "Genol",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke im genossenschaftlichen Umfeld.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "go",
+      "name": "GO",
+      "countries": ["DE"],
+      "aliases": ["GO Tankstelle"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke, in der Marktstatistik gemeinsam mit Sprint ausgewiesen.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "hem",
+      "name": "HEM",
+      "countries": ["DE"],
+      "aliases": ["Deutsche Tamoil"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke der Deutschen Tamoil.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "hoyer",
+      "name": "Hoyer",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "iq",
+      "name": "IQ",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "jet",
+      "name": "JET",
+      "countries": ["DE", "AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Deutschland und Österreich.",
+      "source_ids": ["de-eid-2025", "at-wko-2025"]
+    },
+    {
+      "slug": "jubin",
+      "name": "JUBIN",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "lm-energy",
+      "name": "LM-Energy",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "ltg",
+      "name": "LTG",
+      "countries": ["DE"],
+      "aliases": ["Lother Tankstellen"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Marke der Lother-Gruppe.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "midland",
+      "name": "MIDLAND",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "migrol",
+      "name": "MIGROL",
+      "countries": ["CH"],
+      "aliases": ["migrolino"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke; migrolino wird als zugehöriger Shop-/Standortalias geführt.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "miniprix",
+      "name": "MINIPRIX",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "nordoel",
+      "name": "NORDOEL",
+      "countries": ["DE"],
+      "aliases": ["Nordoel"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Marke der Lother-Gruppe.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "oeltrans",
+      "name": "OELTRANS",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "oil",
+      "name": "OIL!",
+      "countries": ["DE", "AT", "CH"],
+      "aliases": ["OIL Tankstellen"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke mit Standorten in Deutschland, Österreich und der Schweiz.",
+      "source_ids": ["de-eid-2025", "at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "omv",
+      "name": "OMV",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke; ehemalige deutsche Stationen werden im aktuellen deutschen Quellstand nicht mehr separat geführt.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "orlen",
+      "name": "ORLEN",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Deutschland; die Quelle weist ORLEN und star gemeinsam aus.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "pin",
+      "name": "PIN",
+      "countries": ["DE"],
+      "aliases": ["Pinoil"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "pink",
+      "name": "Pink",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "q1",
+      "name": "Q1",
+      "countries": ["DE"],
+      "aliases": ["Q1 Energie"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "raiffeisen",
+      "name": "Raiffeisen",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutscher Tankstellenauftritt im genossenschaftlichen Umfeld; BayWa wird separat geführt.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "ruedi-ruessel",
+      "name": "RUEDI RÜSSEL",
+      "countries": ["CH"],
+      "aliases": ["Ruedi Rüssel", "Ruedi Ruessel"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "rumpold",
+      "name": "Rumpold",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische regionale Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "score",
+      "name": "SCORE",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche regionale Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "shell",
+      "name": "Shell",
+      "countries": ["DE", "AT", "CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke mit Netzen in Deutschland, Österreich und der Schweiz.",
+      "source_ids": ["de-eid-2025", "at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "simond",
+      "name": "SIMOND",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "socar",
+      "name": "SOCAR",
+      "countries": ["AT", "CH"],
+      "aliases": ["A1"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Österreich und der Schweiz; A1 wird für österreichische Bestandsdaten als Alias geführt.",
+      "source_ids": ["at-wko-2025", "ch-avenergy-2025"]
+    },
+    {
+      "slug": "sprint",
+      "name": "Sprint",
+      "countries": ["DE", "AT"],
+      "aliases": ["Sprint Tank"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Tankstellenmarke in Deutschland und Österreich; in Deutschland gemeinsam mit GO ausgewiesen.",
+      "source_ids": ["de-eid-2025", "at-wko-2025"]
+    },
+    {
+      "slug": "spritkoenig",
+      "name": "Spritkönig",
+      "countries": ["AT"],
+      "aliases": ["Spritkoenig"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "spurt",
+      "name": "SPURT",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "star",
+      "name": "star",
+      "countries": ["DE"],
+      "aliases": ["ORLEN star"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke der ORLEN-Gruppe; die Quelle weist ORLEN und star gemeinsam aus.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "svg",
+      "name": "SVG",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutscher Tankstellenauftritt für das Verkehrsgewerbe.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "tamoil",
+      "name": "TAMOIL",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke; der deutsche Markenauftritt HEM wird separat geführt.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "tank-roth",
+      "name": "Tank Roth",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische regionale Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "team",
+      "name": "team",
+      "countries": ["DE"],
+      "aliases": ["team energie"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "totalenergies",
+      "name": "TotalEnergies",
+      "countries": ["DE"],
+      "aliases": ["TOTAL"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Bestehender Markenauftritt im von Circle K übernommenen deutschen Netz; während der Umstellung separat auswählbar.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "treibstoffparadies-kohlhammer",
+      "name": "Treibstoffparadies Kohlhammer",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische regionale Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "troppacher",
+      "name": "Troppacher",
+      "countries": ["AT"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische regionale Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "turmoel",
+      "name": "Turmöl",
+      "countries": ["AT"],
+      "aliases": ["Turmoel"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Österreichische Tankstellenmarke.",
+      "source_ids": ["at-wko-2025"]
+    },
+    {
+      "slug": "varo",
+      "name": "VARO",
+      "countries": ["CH"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "voegtlin-meyer",
+      "name": "VOEGTLIN-MEYER",
+      "countries": ["CH"],
+      "aliases": ["Vögtlin-Meyer", "Voegtlin-Meyer"],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Schweizer regionale Tankstellenmarke.",
+      "source_ids": ["ch-avenergy-2025"]
+    },
+    {
+      "slug": "westfalen",
+      "name": "Westfalen",
+      "countries": ["DE"],
+      "aliases": [],
+      "status": "active",
+      "classification": "consumer_brand",
+      "description_de": "Deutsche Tankstellenmarke.",
+      "source_ids": ["de-eid-2025"]
+    },
+    {
+      "slug": "freie-tankstelle",
+      "name": "Freie Tankstelle / sonstige Eigenmarke",
+      "countries": ["DE", "AT", "CH"],
+      "aliases": ["Freie Tankstelle", "Sonstige Eigenmarke"],
+      "status": "active",
+      "classification": "generic_fallback",
+      "description_de": "Auffangwert für reale freie oder sehr kleine regionale Marken, die noch nicht als eigener zentraler Katalogeintrag vorhanden sind.",
+      "source_ids": ["de-eid-2025", "at-wko-2025", "ch-avenergy-2025"]
+    }
+  ]
+}

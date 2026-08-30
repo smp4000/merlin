@@ -1,0 +1,299 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer base {
+    :root {
+        --merlin-ink: #122326;
+        --merlin-muted: #617477;
+        --merlin-petrol: #087f78;
+        --merlin-petrol-dark: #075e5a;
+        --merlin-mint: #dff5ef;
+        --merlin-amber: #ffb400;
+        --merlin-line: #dce7e5;
+        --merlin-surface: #ffffff;
+        --merlin-canvas: #f4f8f7;
+    }
+
+    body { color: var(--merlin-ink); }
+    button, input, select { font: inherit; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--merlin-petrol) 36%, transparent); outline-offset: 2px; }
+}
+
+@layer components {
+    .merlin-public-shell {
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at 12% 18%, rgb(8 127 120 / 8%), transparent 27rem),
+            var(--merlin-canvas);
+        font-family: 'Segoe UI Variable', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .merlin-public-header, .merlin-public-footer {
+        width: min(1180px, calc(100% - 2rem));
+        margin-inline: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .merlin-public-header { min-height: 84px; }
+    .merlin-public-footer { min-height: 86px; color: var(--merlin-muted); font-size: .875rem; }
+    .merlin-public-footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+    .merlin-public-footer button { color: inherit; cursor: pointer; }
+    .merlin-public-footer a:hover, .merlin-public-footer button:hover, .merlin-header-link:hover { color: var(--merlin-petrol); }
+
+    .merlin-wordmark { display: inline-flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .merlin-wordmark-mark {
+        width: 2.6rem; height: 2.6rem; border-radius: .85rem; display: grid; place-items: center;
+        color: white; background: linear-gradient(145deg, var(--merlin-petrol), var(--merlin-petrol-dark));
+        box-shadow: 0 8px 22px rgb(8 127 120 / 22%); font-weight: 800;
+    }
+    .merlin-wordmark > span:last-child { display: grid; line-height: 1.05; }
+    .merlin-wordmark strong { font-size: 1.2rem; letter-spacing: -.02em; }
+    .merlin-wordmark small { margin-top: .22rem; color: var(--merlin-muted); font-size: .7rem; letter-spacing: .09em; text-transform: uppercase; }
+    .merlin-header-link { font-weight: 700; text-decoration: none; }
+    .merlin-header-actions { display: flex; align-items: center; gap: 1rem; }
+    .merlin-language-link { padding: .35rem .5rem; border: 1px solid var(--merlin-line); border-radius: .5rem; color: var(--merlin-muted); font-size: .72rem; font-weight: 800; text-decoration: none; }
+
+    .merlin-hero, .merlin-registration-grid {
+        width: min(1180px, calc(100% - 2rem)); margin: 2rem auto 4.5rem; display: grid;
+        grid-template-columns: minmax(0, .9fr) minmax(520px, 1.1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center;
+    }
+    .merlin-hero { min-height: 610px; }
+    .merlin-hero-copy h1, .merlin-registration-intro h1 {
+        margin-top: 1rem; font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: .98; letter-spacing: -.065em; font-weight: 790;
+    }
+    .merlin-hero-copy h1 em { color: var(--merlin-petrol); font-style: normal; }
+    .merlin-hero-copy > p, .merlin-registration-intro > p { margin-top: 1.5rem; max-width: 42rem; color: var(--merlin-muted); font-size: 1.12rem; line-height: 1.75; }
+    .merlin-eyebrow { color: var(--merlin-petrol); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .merlin-hero-actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .8rem; }
+    .merlin-hero-note { margin-top: 1rem !important; font-size: .83rem !important; }
+
+    .merlin-primary-button, .merlin-secondary-button {
+        min-height: 3.25rem; border-radius: .9rem; padding: .8rem 1.25rem; display: inline-flex; align-items: center;
+        justify-content: center; gap: .75rem; font-weight: 760; text-decoration: none; cursor: pointer; transition: .18s ease;
+    }
+    .merlin-primary-button { color: white; background: var(--merlin-petrol); box-shadow: 0 10px 24px rgb(8 127 120 / 20%); }
+    .merlin-primary-button:hover { background: var(--merlin-petrol-dark); transform: translateY(-1px); }
+    .merlin-secondary-button { border: 1px solid var(--merlin-line); background: white; }
+    .merlin-secondary-button:hover { border-color: var(--merlin-petrol); color: var(--merlin-petrol); }
+
+    .merlin-hero-panel { overflow: hidden; border: 1px solid rgb(18 35 38 / 9%); border-radius: 1.6rem; background: white; box-shadow: 0 32px 80px rgb(18 35 38 / 13%); transform: rotate(1.5deg); }
+    .merlin-preview-topline { height: 2.8rem; display: flex; align-items: center; gap: .42rem; padding-inline: 1rem; border-bottom: 1px solid var(--merlin-line); }
+    .merlin-preview-topline span { width: .55rem; height: .55rem; border-radius: 50%; background: #d6e2e0; }
+    .merlin-preview-content { min-height: 430px; display: grid; grid-template-columns: 72px 1fr; }
+    .merlin-preview-sidebar { padding: 1.4rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; color: white; background: var(--merlin-ink); }
+    .merlin-preview-sidebar strong { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border-radius: .7rem; background: var(--merlin-petrol); }
+    .merlin-preview-sidebar i { width: 1.35rem; height: .45rem; border-radius: 99px; background: #496063; }
+    .merlin-preview-sidebar i.is-active { background: var(--merlin-amber); }
+    .merlin-preview-main { padding: clamp(1.5rem, 4vw, 2.7rem); }
+    .merlin-preview-main > small { color: var(--merlin-muted); }
+    .merlin-preview-main h2 { margin-top: .3rem; font-size: 1.75rem; font-weight: 780; }
+    .merlin-preview-stats { margin-top: 2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+    .merlin-preview-stats article { padding: 1rem; border-radius: 1rem; background: var(--merlin-canvas); }
+    .merlin-preview-stats span { display: block; font-size: 1.7rem; font-weight: 800; }
+    .merlin-preview-stats small { color: var(--merlin-muted); }
+    .merlin-preview-card { height: 150px; margin-top: 1.25rem; padding: 1.2rem; display: grid; gap: .75rem; border: 1px solid var(--merlin-line); border-radius: 1rem; }
+    .merlin-preview-card span { border-radius: .45rem; background: linear-gradient(90deg, var(--merlin-mint) 65%, #edf2f1 65%); }
+
+    .merlin-feature-strip { width: min(1180px, calc(100% - 2rem)); margin: 0 auto 4rem; display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--merlin-line); }
+    .merlin-feature-strip article { padding: 2rem; border-right: 1px solid var(--merlin-line); }
+    .merlin-feature-strip article:last-child { border-right: 0; }
+    .merlin-feature-strip span { color: var(--merlin-petrol); font-weight: 800; }
+    .merlin-feature-strip h2 { margin-top: .8rem; font-size: 1.15rem; font-weight: 780; }
+    .merlin-feature-strip p { margin-top: .45rem; color: var(--merlin-muted); line-height: 1.65; }
+
+    .merlin-registration-grid { align-items: start; margin-top: 3rem; }
+    .merlin-registration-intro { position: sticky; top: 2rem; padding-top: 3rem; }
+    .merlin-registration-intro h1 { font-size: clamp(2.6rem, 5vw, 4.4rem); }
+    .merlin-benefit-list { margin-top: 2rem; display: grid; gap: .9rem; }
+    .merlin-benefit-list li { display: flex; align-items: center; gap: .9rem; color: var(--merlin-muted); }
+    .merlin-benefit-list span { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: .8rem; color: var(--merlin-petrol); background: var(--merlin-mint); font-size: .8rem; font-weight: 800; }
+    .merlin-security-note, .merlin-state-hint { margin-top: 2rem; padding: 1.1rem 1.2rem; border-left: 3px solid var(--merlin-petrol); border-radius: 0 .8rem .8rem 0; background: rgb(255 255 255 / 65%); }
+    .merlin-security-note p, .merlin-state-hint p { margin-top: .3rem; color: var(--merlin-muted); line-height: 1.55; }
+
+    .merlin-form-card, .merlin-state-card { border: 1px solid rgb(18 35 38 / 9%); border-radius: 1.5rem; background: var(--merlin-surface); box-shadow: 0 24px 70px rgb(18 35 38 / 10%); }
+    .merlin-form-card { padding: clamp(1.2rem, 4vw, 2.4rem); }
+    .merlin-step-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; padding: .35rem; border-radius: 1rem; background: var(--merlin-canvas); }
+    .merlin-step-tabs li { min-height: 2.7rem; padding: .55rem .7rem; display: flex; align-items: center; gap: .5rem; border-radius: .75rem; color: var(--merlin-muted); font-size: .78rem; font-weight: 700; }
+    .merlin-step-tabs li span { width: 1.45rem; height: 1.45rem; display: grid; place-items: center; border-radius: 50%; background: white; }
+    .merlin-step-tabs li.is-active { color: var(--merlin-petrol-dark); background: white; box-shadow: 0 3px 12px rgb(18 35 38 / 8%); }
+    .merlin-step-tabs li.is-complete { color: var(--merlin-petrol); }
+    .merlin-form-heading { margin-block: 2rem 1.5rem; }
+    .merlin-form-heading > span { color: var(--merlin-petrol); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+    .merlin-form-heading h1, .merlin-form-heading h2 { margin-top: .4rem; font-size: clamp(1.7rem, 4vw, 2.35rem); font-weight: 790; letter-spacing: -.035em; }
+    .merlin-form-heading p { margin-top: .5rem; color: var(--merlin-muted); line-height: 1.6; }
+    .merlin-form { display: grid; gap: 1.3rem; }
+    .merlin-form fieldset { display: grid; gap: 1rem; padding-top: 1.2rem; border-top: 1px solid var(--merlin-line); }
+    .merlin-form legend { padding-right: .8rem; font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .merlin-form label { display: grid; gap: .4rem; font-size: .87rem; font-weight: 700; }
+    .merlin-form input:not([type='radio']):not([type='checkbox']), .merlin-form select {
+        width: 100%; min-height: 3.15rem; padding: .7rem .85rem; border: 1px solid #cbdad8; border-radius: .75rem; background: white; transition: .15s ease;
+    }
+    .merlin-form input:hover, .merlin-form select:hover { border-color: #96b9b5; }
+    .merlin-form input:focus, .merlin-form select:focus { border-color: var(--merlin-petrol); outline: 3px solid rgb(8 127 120 / 13%); }
+    .merlin-form label > small { color: var(--merlin-muted); font-weight: 400; }
+    .merlin-field-grid, .merlin-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+    .merlin-choice-card { position: relative; }
+    .merlin-choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .merlin-choice-card > span { min-height: 5rem; padding: 1rem; display: grid; align-content: center; border: 1px solid #cbdad8; border-radius: .85rem; cursor: pointer; }
+    .merlin-choice-card small { margin-top: .25rem; color: var(--merlin-muted); font-weight: 400; line-height: 1.4; }
+    .merlin-choice-card input:checked + span { border-color: var(--merlin-petrol); background: var(--merlin-mint); box-shadow: inset 0 0 0 1px var(--merlin-petrol); }
+    .merlin-choice-card input:focus-visible + span { outline: 3px solid rgb(8 127 120 / 22%); }
+    .merlin-checkbox { grid-template-columns: 1.2rem 1fr; align-items: start; gap: .7rem !important; font-weight: 500 !important; line-height: 1.55; }
+    .merlin-checkbox input { width: 1.1rem; height: 1.1rem; margin-top: .15rem; accent-color: var(--merlin-petrol); }
+    .merlin-checkbox a { color: var(--merlin-petrol-dark); font-weight: 700; }
+    .merlin-submit-note { color: var(--merlin-muted); text-align: center; font-size: .78rem; }
+    .merlin-field-error { color: #b42318 !important; font-weight: 650 !important; }
+    .merlin-error-summary { padding: 1rem 1.1rem; border: 1px solid #f4b7b2; border-radius: .8rem; color: #8f1f17; background: #fff5f4; }
+    .merlin-error-summary ul { margin-top: .45rem; padding-left: 1.2rem; list-style: disc; }
+
+    .merlin-state-page { width: min(760px, calc(100% - 2rem)); min-height: 68vh; margin: 2rem auto; display: grid; place-items: center; }
+    .merlin-state-card { width: min(610px, 100%); padding: clamp(2rem, 7vw, 4.5rem); text-align: center; }
+    .merlin-state-card h1 { margin-top: .7rem; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.08; font-weight: 800; letter-spacing: -.045em; }
+    .merlin-state-card > p { margin-top: 1rem; color: var(--merlin-muted); line-height: 1.7; }
+    .merlin-state-card .merlin-state-hint { text-align: left; }
+    .merlin-state-card > a { margin-top: 1.5rem; }
+    .merlin-state-icon { width: 4rem; height: 4rem; margin: 0 auto 1.5rem; display: grid; place-items: center; border-radius: 1.2rem; color: var(--merlin-petrol-dark); background: var(--merlin-mint); font-size: 1.5rem; font-weight: 800; }
+    .merlin-state-icon.is-warning { color: #8a5200; background: #fff0c2; }
+    .merlin-confirm-card { width: min(650px, 100%); }
+
+    .merlin-legal-page { width: min(760px, calc(100% - 2rem)); min-height: 65vh; margin: 4rem auto; padding: clamp(1.5rem, 5vw, 3.5rem); border: 1px solid var(--merlin-line); border-radius: 1.3rem; background: white; }
+    .merlin-legal-page h1 { margin-top: .6rem; font-size: 2.6rem; font-weight: 800; }
+    .merlin-legal-page h2 { margin-top: 2rem; font-size: 1.25rem; font-weight: 780; }
+    .merlin-legal-page p { margin-top: .7rem; color: var(--merlin-muted); line-height: 1.75; }
+
+    .has-privacy-dialog { overflow: hidden; }
+    .merlin-privacy[hidden] { display: none; }
+    .merlin-privacy { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; }
+    .merlin-privacy-backdrop { position: absolute; inset: 0; background: rgb(9 24 28 / 70%); backdrop-filter: blur(7px); }
+    .merlin-privacy-dialog {
+        position: relative; width: min(780px, 100%); max-height: calc(100vh - 2rem); overflow-y: auto;
+        border: 1px solid rgb(255 255 255 / 30%); border-radius: 1.75rem; background: var(--merlin-surface);
+        box-shadow: 0 32px 90px rgb(3 15 18 / 38%);
+    }
+    .merlin-privacy-close {
+        position: absolute; top: 1rem; right: 1rem; z-index: 1; width: 2.6rem; height: 2.6rem;
+        display: grid; place-items: center; border: 1px solid var(--merlin-line); border-radius: .8rem;
+        color: var(--merlin-muted); background: white; font-size: 1.5rem; line-height: 1; cursor: pointer;
+    }
+    .merlin-privacy-heading { padding: clamp(1.5rem, 5vw, 2.7rem); display: grid; grid-template-columns: auto 1fr; gap: 1.15rem; }
+    .merlin-privacy-icon {
+        width: 3rem; height: 3rem; display: grid; place-items: center; border-radius: 1rem;
+        color: var(--merlin-petrol-dark); background: var(--merlin-mint); font-size: 1.15rem; font-weight: 900;
+    }
+    .merlin-privacy-heading h2 { margin-top: .35rem; padding-right: 2.5rem; font-size: clamp(1.7rem, 4vw, 2.35rem); font-weight: 810; letter-spacing: -.04em; }
+    .merlin-privacy-heading p { margin-top: .55rem; max-width: 620px; color: var(--merlin-muted); line-height: 1.65; }
+    .merlin-privacy-heading a { margin-top: .7rem; display: inline-flex; color: var(--merlin-petrol-dark); font-size: .86rem; font-weight: 780; text-decoration: none; }
+    .merlin-privacy-heading a:hover { text-decoration: underline; text-underline-offset: .2rem; }
+    .merlin-privacy-categories { padding: 0 clamp(1.5rem, 5vw, 2.7rem) 1.8rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+    .merlin-privacy-category { position: relative; min-width: 0; }
+    .merlin-privacy-category input { position: absolute; top: 1rem; left: 1rem; width: 1.1rem; height: 1.1rem; accent-color: var(--merlin-petrol); }
+    .merlin-privacy-category > span {
+        min-height: 7.2rem; padding: 1rem 1rem 1rem 2.7rem; display: grid; align-content: start;
+        border: 1px solid #cbdad8; border-radius: 1rem; background: white; cursor: pointer;
+        transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .merlin-privacy-category input:checked + span { border-color: var(--merlin-petrol); background: #f1fbf8; box-shadow: inset 0 0 0 1px var(--merlin-petrol); }
+    .merlin-privacy-category input:focus-visible + span { outline: 3px solid rgb(8 127 120 / 22%); outline-offset: 2px; }
+    .merlin-privacy-category strong { font-size: .9rem; }
+    .merlin-privacy-category small { margin-top: .35rem; color: var(--merlin-muted); font-size: .75rem; line-height: 1.45; }
+    .merlin-privacy-category.is-required > span { background: var(--merlin-canvas); cursor: default; }
+    .merlin-privacy-actions {
+        padding: 1rem clamp(1.5rem, 5vw, 2.7rem); display: flex; justify-content: flex-end; gap: .7rem;
+        border-top: 1px solid var(--merlin-line); border-radius: 0 0 1.75rem 1.75rem; background: #fbfcfc;
+    }
+    .merlin-privacy-button { min-height: 2.9rem; padding: .65rem 1rem; border-radius: .85rem; font-size: .84rem; font-weight: 780; cursor: pointer; }
+    .merlin-privacy-button.is-secondary { border: 1px solid #cbdad8; color: var(--merlin-ink); background: white; }
+    .merlin-privacy-button.is-secondary:hover { border-color: var(--merlin-petrol); color: var(--merlin-petrol-dark); }
+    .merlin-privacy-button.is-primary { border: 1px solid var(--merlin-petrol); color: white; background: var(--merlin-petrol); }
+    .merlin-privacy-button.is-primary:hover { background: var(--merlin-petrol-dark); }
+
+    .merlin-onboarding-shell { padding-bottom: 5rem; }
+    .merlin-onboarding-user { padding: .55rem .85rem; border: 1px solid var(--merlin-line); border-radius: 99px; color: var(--merlin-muted); background: rgb(255 255 255 / 72%); font-size: .82rem; font-weight: 700; }
+    .merlin-onboarding-page { width: min(1180px, calc(100% - 2rem)); margin: 2.5rem auto; }
+    .merlin-onboarding-heading { max-width: 760px; margin-bottom: 2rem; }
+    .merlin-onboarding-heading h1 { margin-top: .55rem; font-size: clamp(2.2rem, 5vw, 4.2rem); line-height: 1; letter-spacing: -.055em; font-weight: 800; }
+    .merlin-onboarding-heading p { margin-top: 1rem; color: var(--merlin-muted); font-size: 1.05rem; line-height: 1.7; }
+    .merlin-onboarding-card { overflow: hidden; border: 1px solid rgb(18 35 38 / 10%); border-radius: 1.5rem; background: white; box-shadow: 0 26px 75px rgb(18 35 38 / 11%); }
+    .merlin-onboarding-tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding: .6rem; gap: .35rem; border-bottom: 1px solid var(--merlin-line); background: #f8fbfa; }
+    .merlin-onboarding-tabs button { min-height: 3.4rem; padding: .65rem; display: flex; align-items: center; justify-content: center; gap: .45rem; border-radius: .8rem; color: var(--merlin-muted); font-size: .76rem; font-weight: 750; cursor: pointer; }
+    .merlin-onboarding-tabs button span { width: 1.5rem; height: 1.5rem; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: #e8efed; font-size: .7rem; }
+    .merlin-onboarding-tabs button.is-active { color: var(--merlin-petrol-dark); background: white; box-shadow: 0 4px 16px rgb(18 35 38 / 9%); }
+    .merlin-onboarding-tabs button.is-active span { color: white; background: var(--merlin-petrol); }
+    .merlin-onboarding-panel { display: none; min-height: 390px; padding: clamp(1.5rem, 5vw, 3.5rem); }
+    .merlin-onboarding-panel.is-active { display: block; }
+    .merlin-onboarding-panel label { display: grid; gap: .42rem; color: var(--merlin-ink); font-size: .86rem; font-weight: 720; }
+    .merlin-onboarding-panel input:not([type='checkbox']), .merlin-onboarding-panel select { width: 100%; min-height: 3.15rem; padding: .7rem .85rem; border: 1px solid #cbdad8; border-radius: .75rem; background: white; }
+    .merlin-onboarding-panel input:focus, .merlin-onboarding-panel select:focus { border-color: var(--merlin-petrol); outline: 3px solid rgb(8 127 120 / 13%); }
+    .merlin-panel-heading { position: relative; margin-bottom: 1.6rem; }
+    .merlin-panel-heading > span { color: var(--merlin-petrol); font-size: .73rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .merlin-panel-heading h2 { margin-top: .35rem; font-size: 2rem; letter-spacing: -.035em; font-weight: 800; }
+    .merlin-panel-heading p { margin-top: .5rem; max-width: 650px; color: var(--merlin-muted); line-height: 1.6; }
+    .merlin-copy-action { margin-top: .8rem; color: var(--merlin-petrol-dark); font-size: .82rem; font-weight: 760; cursor: pointer; }
+    .merlin-bank-fields { margin-top: 1.5rem; display: grid; gap: 1.2rem; padding: 1.25rem; border: 1px solid var(--merlin-line); border-radius: 1rem; background: var(--merlin-canvas); }
+    .merlin-bank-fields[hidden] { display: none; }
+    .merlin-bank-choice { display: grid; gap: .7rem; }
+    .merlin-bank-divider { display: flex; align-items: center; gap: .8rem; color: var(--merlin-muted); font-size: .75rem; }
+    .merlin-bank-divider::before, .merlin-bank-divider::after { height: 1px; flex: 1; content: ''; background: var(--merlin-line); }
+    .merlin-bank-warning, .merlin-review-note { padding: 1rem 1.1rem; border-left: 3px solid var(--merlin-amber); border-radius: 0 .8rem .8rem 0; color: #6d4b00; background: #fff8df; font-size: .85rem; line-height: 1.6; }
+    .merlin-iban-calculation { display: flex; align-items: center; gap: 1rem; }
+    .merlin-iban-calculation button { flex: 0 0 auto; }
+    .merlin-iban-result { color: var(--merlin-muted); font-size: .84rem; line-height: 1.5; }
+    .merlin-iban-result.is-success { color: var(--merlin-petrol-dark); font-weight: 700; }
+    .merlin-iban-result.is-error { color: #b42318; font-weight: 700; }
+    .merlin-onboarding-actions { padding: 1rem 1.4rem; display: flex; justify-content: flex-end; gap: .75rem; border-top: 1px solid var(--merlin-line); background: #fbfcfc; }
+    .merlin-onboarding-actions button[hidden] { display: none; }
+    .merlin-onboarding-actions button:disabled { opacity: .45; cursor: not-allowed; }
+
+    @media (max-width: 900px) {
+        .merlin-hero, .merlin-registration-grid { grid-template-columns: 1fr; }
+        .merlin-hero { padding-top: 2rem; }
+        .merlin-registration-intro { position: static; padding-top: 0; }
+        .merlin-feature-strip { grid-template-columns: 1fr; }
+        .merlin-feature-strip article { border-right: 0; border-bottom: 1px solid var(--merlin-line); }
+        .merlin-onboarding-tabs { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+        .merlin-public-header { min-height: 70px; }
+        .merlin-wordmark small { display: none; }
+        .merlin-hero, .merlin-registration-grid { margin-top: 1rem; }
+        .merlin-hero { min-height: auto; }
+        .merlin-hero-copy h1 { font-size: 2.7rem; }
+        .merlin-hero-actions, .merlin-hero-actions a { width: 100%; }
+        .merlin-hero-panel { transform: none; }
+        .merlin-preview-content { grid-template-columns: 48px 1fr; min-height: 340px; }
+        .merlin-preview-sidebar { padding: 1rem .5rem; }
+        .merlin-preview-stats { grid-template-columns: 1fr; }
+        .merlin-preview-stats article:nth-child(n+2) { display: none; }
+        .merlin-field-grid, .merlin-choice-grid { grid-template-columns: 1fr; }
+        .merlin-step-tabs li { justify-content: center; padding-inline: .25rem; font-size: 0; }
+        .merlin-step-tabs li span { font-size: .78rem; }
+        .merlin-form-card { padding: 1rem; border-radius: 1rem; }
+        .merlin-public-footer { align-items: flex-start; flex-direction: column; justify-content: center; gap: .5rem; }
+        .merlin-onboarding-tabs { grid-template-columns: repeat(6, minmax(3rem, 1fr)); overflow-x: auto; }
+        .merlin-onboarding-tabs button { font-size: 0; }
+        .merlin-onboarding-tabs button span { font-size: .7rem; }
+        .merlin-onboarding-panel { min-height: 0; padding: 1.25rem; }
+        .merlin-onboarding-actions { position: sticky; bottom: 0; }
+        .merlin-iban-calculation { align-items: stretch; flex-direction: column; }
+        .merlin-privacy { align-items: end; padding: 0; }
+        .merlin-privacy-dialog { max-height: 92vh; border-radius: 1.35rem 1.35rem 0 0; }
+        .merlin-privacy-heading { padding: 1.35rem; grid-template-columns: 1fr; gap: .7rem; }
+        .merlin-privacy-heading h2 { padding-right: 2.5rem; }
+        .merlin-privacy-icon { width: 2.6rem; height: 2.6rem; }
+        .merlin-privacy-categories { padding: 0 1.35rem 1.3rem; grid-template-columns: 1fr; }
+        .merlin-privacy-category > span { min-height: 4.8rem; }
+        .merlin-privacy-actions { position: sticky; bottom: 0; padding: 1rem 1.35rem; flex-direction: column; }
+        .merlin-privacy-button { width: 100%; }
+    }
+}
