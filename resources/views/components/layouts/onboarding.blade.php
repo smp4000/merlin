@@ -1,4 +1,4 @@
-@props(['title' => 'Merlin Onboarding'])
+@props(['title' => 'Merlin Onboarding', 'tagline' => 'Geschütztes Onboarding'])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -13,7 +13,7 @@
         <header class="merlin-public-header">
             <a href="{{ url('/') }}" class="merlin-wordmark" aria-label="Merlin Startseite">
                 <span class="merlin-wordmark-mark" aria-hidden="true">M</span>
-                <span><strong>Merlin</strong><small>Geschütztes Onboarding</small></span>
+                <span><strong>Merlin</strong><small>{{ $tagline }}</small></span>
             </a>
             <span class="merlin-onboarding-user">{{ auth()->user()->name }}</span>
         </header>

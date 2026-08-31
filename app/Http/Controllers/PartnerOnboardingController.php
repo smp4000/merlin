@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\TenantStatus;
 use App\Foundation\Audit\AuditRecorder;
 use App\Foundation\Tenancy\TenantContext;
-use App\Foundation\Tenancy\TenantContextResolver;
 use App\Http\Requests\StorePartnerOnboardingRequest;
 use App\Models\BankDirectoryEntry;
 use App\Models\BankDirectoryVersion;
@@ -31,10 +30,8 @@ use InvalidArgumentException;
  */
 final class PartnerOnboardingController extends Controller
 {
-    public function show(TenantContextResolver $resolver): View|RedirectResponse
+    public function show(TenantContext $context): View|RedirectResponse
     {
-        $context = $this->context($resolver);
-
         if ($context->tenant->status !== TenantStatus::Onboarding) {
             return redirect('/admin/dashboard');
         }
@@ -53,11 +50,10 @@ final class PartnerOnboardingController extends Controller
      */
     public function store(
         StorePartnerOnboardingRequest $request,
-        TenantContextResolver $resolver,
+        TenantContext $context,
         GermanIban $ibanService,
         AuditRecorder $auditRecorder,
     ): RedirectResponse {
-        $context = $this->context($resolver);
         abort_unless($context->tenant->status === TenantStatus::Onboarding, 403);
         $data = $request->validated();
 
@@ -176,13 +172,6 @@ final class PartnerOnboardingController extends Controller
         });
 
         return redirect('/admin/dashboard')->with('status', 'Onboarding erfolgreich abgeschlossen.');
-    }
-
-    private function context(TenantContextResolver $resolver): TenantContext
-    {
-        $tenantPublicId = (string) request()->session()->get('active_tenant_public_id');
-
-        return $resolver->resolve(request()->user(), $tenantPublicId);
     }
 
     private function maskIdentifier(?string $value): ?string

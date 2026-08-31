@@ -35,14 +35,14 @@ final class PartnerAdministrationTest extends TestCase
     public function test_partner_resource_is_restricted_to_platform_super_admins(): void
     {
         $regularUser = User::factory()->create(['email_verified_at' => now()]);
-        $this->actingAs($regularUser)->get('/admin/partners')->assertForbidden();
+        $this->actingAs($regularUser)->get('/platform/partners')->assertForbidden();
 
         $superAdmin = User::factory()->create([
             'email_verified_at' => now(),
             'is_platform_super_admin' => true,
         ]);
 
-        $this->actingAs($superAdmin)->get('/admin/partners')->assertOk();
+        $this->actingAs($superAdmin)->get('/platform/partners')->assertOk();
     }
 
     /**
@@ -56,7 +56,7 @@ final class PartnerAdministrationTest extends TestCase
             'is_platform_super_admin' => true,
         ]);
         $this->actingAs($superAdmin);
-        Filament::setCurrentPanel(Filament::getPanel('admin'));
+        Filament::setCurrentPanel(Filament::getPanel('platform'));
 
         Livewire::test(ListPartners::class)
             ->callAction('invitePartner', data: [

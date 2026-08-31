@@ -6,6 +6,7 @@ use App\Filament\Resources\BankDirectorySources\Pages\EditBankDirectorySource;
 use App\Filament\Resources\BankDirectorySources\Pages\ListBankDirectorySources;
 use App\Models\BankDirectorySource;
 use BackedEnum;
+use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -62,7 +63,7 @@ final class BankDirectorySourceResource extends Resource
             TextColumn::make('versions.entry_count')->label('Einträge')->state(fn (BankDirectorySource $record): int => (int) ($record->versions()->where('status', 'active')->value('entry_count') ?? 0)),
             IconColumn::make('is_active')->label('Aktiv')->boolean(),
         ])->recordActions([
-            \Filament\Actions\EditAction::make(),
+            EditAction::make(),
         ]);
     }
 

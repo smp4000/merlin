@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Foundation\Legal\LegalDocumentRepository;
+use App\Foundation\Tenancy\TenantContextSession;
 use App\Http\Requests\ConfirmPartnerRegistrationRequest;
 use App\Modules\Registration\Application\ConfirmPartnerRegistration;
 use App\Modules\Registration\Application\Data\ConfirmPartnerRegistrationData;
@@ -41,6 +42,7 @@ final class PartnerRegistrationConfirmationController extends Controller
         ConfirmPartnerRegistrationRequest $request,
         string $intent,
         ConfirmPartnerRegistration $confirmation,
+        TenantContextSession $tenantSession,
     ): JsonResponse|RedirectResponse|Response {
         try {
             $result = $confirmation->handle(new ConfirmPartnerRegistrationData(
@@ -60,8 +62,7 @@ final class PartnerRegistrationConfirmationController extends Controller
         }
 
         Auth::login($result->user);
-        $request->session()->regenerate();
-        $request->session()->put('active_tenant_public_id', $result->tenant->public_id);
+        $tenantSession->select($request, $result->user, $result->tenant->public_id);
 
         if ($request->expectsJson()) {
             return response()->json([

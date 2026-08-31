@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Foundation\Tenancy\AccessibleTenantMemberships;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -40,16 +41,23 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Erlaubt den vorläufigen Backoffice-Zugang nur für bestätigte Identitäten.
+     * Trennt Plattform- und Partnerzugang bereits an Filaments zentraler Panel-Schranke.
      *
-     * Diese zentrale Schranke verhindert insbesondere, dass ein lediglich angelegtes,
-     * aber noch nicht per E-Mail bestätigtes Konto das Filament-Panel betreten kann.
-     * Mit der Trennung in Plattform- und Partner-Panel wird diese Prüfung zusätzlich
-     * um den jeweiligen Tenant-Kontext und die passenden Systemrollen erweitert.
+     * Eine Plattformrolle gewährt allein keinen Zugriff auf das Partner-Panel. Umgekehrt
+     * kann eine Partner-Membership niemals das Plattform-Panel öffnen. Identitäten mit
+     * beiden ausdrücklich vergebenen Berechtigungen dürfen beide Kontexte getrennt nutzen.
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->email_verified_at !== null;
+        if ($this->email_verified_at === null) {
+            return false;
+        }
+
+        return match ($panel->getId()) {
+            'platform' => $this->isPlatformSuperAdmin(),
+            'admin' => app(AccessibleTenantMemberships::class)->existsFor($this),
+            default => false,
+        };
     }
 
     /**

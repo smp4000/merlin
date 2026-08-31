@@ -2,8 +2,6 @@
 
 namespace App\Foundation\Tenancy;
 
-use App\Enums\TenantMembershipStatus;
-use App\Models\TenantMembership;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -17,30 +15,23 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 final class TenantContextResolver
 {
     /**
+     * Verwendet dieselbe Membership-Quelle wie Panelzugang und Betriebsauswahl.
+     */
+    public function __construct(private readonly AccessibleTenantMemberships $memberships) {}
+
+    /**
      * Erzeugt einen unveränderlichen Context oder antwortet absichtlich wie bei „nicht gefunden“.
      *
      * @throws ModelNotFoundException Wenn Membership, Zeitraum oder Tenantstatus nicht wirksam sind.
      */
     public function resolve(User $user, string $tenantPublicId): TenantContext
     {
-        $now = now();
-
-        $membership = TenantMembership::query()
-            ->with('tenant')
-            ->where('user_id', $user->getKey())
-            ->where('status', TenantMembershipStatus::Active)
-            ->where('valid_from', '<=', $now)
-            ->where(function ($query) use ($now): void {
-                $query->whereNull('valid_until')->orWhere('valid_until', '>', $now);
-            })
+        $membership = $this->memberships
+            ->queryFor($user)
             ->whereHas('tenant', function ($query) use ($tenantPublicId): void {
                 $query->where('public_id', $tenantPublicId);
             })
             ->firstOrFail();
-
-        if (! $membership->tenant->status->allowsAccess()) {
-            throw (new ModelNotFoundException)->setModel(TenantMembership::class);
-        }
 
         return new TenantContext($membership->tenant, $membership);
     }

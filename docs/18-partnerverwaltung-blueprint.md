@@ -522,12 +522,15 @@ einzeln prüfbaren Umsetzungsschnitten erstellt.
 - datenarme Plattform-Partnerliste;
 - mandantenbezogene Dashboard-Fortschrittsanzeige ohne Raten eines Tenants bei mehreren
   aktiven Memberships;
+- getrenntes Partner-Panel unter `/admin` und Plattform-Panel unter `/platform`;
+- bewusste Betriebsauswahl bei mehreren wirksamen Memberships sowie eindeutige
+  Auto-Auswahl bei genau einer Membership;
+- dauerhaft sichtbarer aktiver Betrieb im Kopfbereich des Partner-Panels;
 - automatisierte Tests für Registrierung, Onboarding, Plattform-Einladung,
-  TenantContext, Nur-Lesen-Grundlage, IBAN und Dashboard.
+  TenantContext, Paneltrennung, Betriebsauswahl, Nur-Lesen-Grundlage, IBAN und Dashboard.
 
 ### Noch nicht umgesetzt
 
-- getrennte Filament-Panels für Plattformverwaltung und Partnerarbeit;
 - Partnerprofil- und Gesellschaftsverwaltung nach dem Erst-Onboarding;
 - zentrale, versionierte Rechtsformen und typisierte Gesellschaftskennungen;
 - Datenbankgarantie für genau eine Hauptgesellschaft pro Tenant;
@@ -557,7 +560,7 @@ einzeln prüfbaren Umsetzungsschnitten erstellt.
 Der nächste Schnitt wird bewusst vor Administratoren, Rollen, Trial-Automation und
 Supportzugriff abgeschlossen. Er besteht aus drei aufeinander aufbauenden Lieferpaketen.
 
-### Paket A: Paneltrennung und autoritativer Arbeitskontext
+### Paket A: Paneltrennung und autoritativer Arbeitskontext – umgesetzt am 31.08.2026
 
 - Partner-Panel bleibt unter `/admin`, damit bestehende Login- und Onboardinglinks stabil
   bleiben.
@@ -581,6 +584,18 @@ Abnahme Paket A:
 - ein Plattform-Super-Admin sieht ohne Supportgrant keine Gesellschafts-, Bank- oder
   Stationsinhalte;
 - bestehende Registrierungs-, Bestätigungs- und Onboardinglinks funktionieren weiter.
+
+Umsetzungsnachweis:
+
+- das Partner-Panel registriert keine Plattformressourcen;
+- das Plattform-Panel registriert ausschließlich explizite globale Ressourcen;
+- Panelzugriff prüft E-Mail-Bestätigung und danach getrennt Plattformrolle oder aktuell
+  wirksame Partner-Membership;
+- jede Partneranfrage bindet denselben zentral geprüften TenantContext;
+- ein abgelaufener oder widerrufener alter Kontext führt zur erneuten bewussten Auswahl
+  und niemals zu einem stillen Wechsel auf einen anderen Tenant;
+- Cross-Panel-, Cross-Tenant-, Fremd-ULID-, Mehrfachmembership- und Ablaufprüfungen sind
+  automatisiert abgedeckt.
 
 ### Paket B: belastbares Partner- und Gesellschaftsmodell
 

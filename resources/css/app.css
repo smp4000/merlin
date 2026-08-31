@@ -264,6 +264,52 @@
     .merlin-onboarding-actions button[hidden] { display: none; }
     .merlin-onboarding-actions button:disabled { opacity: .45; cursor: not-allowed; }
 
+    .merlin-tenant-selection {
+        width: min(860px, calc(100% - 2rem));
+        margin: clamp(2rem, 7vw, 5rem) auto;
+    }
+    .merlin-tenant-selection__heading { max-width: 690px; }
+    .merlin-tenant-selection__heading h1 {
+        margin-top: .55rem; font-size: clamp(2.2rem, 6vw, 4.25rem); line-height: 1;
+        letter-spacing: -.055em; font-weight: 810;
+    }
+    .merlin-tenant-selection__heading p { margin-top: 1rem; color: var(--merlin-muted); font-size: 1.05rem; line-height: 1.7; }
+    .merlin-tenant-selection__card {
+        margin-top: 2rem; padding: clamp(1.2rem, 4vw, 2rem); border: 1px solid rgb(18 35 38 / 10%);
+        border-radius: 1.5rem; background: white; box-shadow: 0 26px 75px rgb(18 35 38 / 11%);
+    }
+    .merlin-tenant-options { display: grid; gap: .8rem; }
+    .merlin-tenant-option { position: relative; display: block; }
+    .merlin-tenant-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .merlin-tenant-option__body {
+        min-height: 5.8rem; padding: 1rem 1.1rem; display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center; gap: 1rem; border: 1px solid #cbdad8; border-radius: 1rem; background: white;
+        cursor: pointer; transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .merlin-tenant-option__mark {
+        width: 3rem; height: 3rem; display: grid; place-items: center; border-radius: .9rem;
+        color: var(--merlin-petrol-dark); background: var(--merlin-mint); font-size: 1.05rem; font-weight: 850;
+    }
+    .merlin-tenant-option strong { display: block; font-size: 1rem; font-weight: 790; }
+    .merlin-tenant-option small { display: block; margin-top: .3rem; overflow: hidden; color: var(--merlin-muted); font-size: .72rem; text-overflow: ellipsis; }
+    .merlin-tenant-option__check {
+        width: 1.8rem; height: 1.8rem; display: grid; place-items: center; border: 1px solid #cbdad8;
+        border-radius: 50%; color: transparent; font-size: .8rem; font-weight: 900;
+    }
+    .merlin-tenant-option input:checked + .merlin-tenant-option__body {
+        border-color: var(--merlin-petrol); background: #f1fbf8; box-shadow: inset 0 0 0 1px var(--merlin-petrol);
+    }
+    .merlin-tenant-option input:checked + .merlin-tenant-option__body .merlin-tenant-option__check {
+        border-color: var(--merlin-petrol); color: white; background: var(--merlin-petrol);
+    }
+    .merlin-tenant-option input:focus-visible + .merlin-tenant-option__body { outline: 3px solid rgb(8 127 120 / 22%); outline-offset: 2px; }
+    .merlin-tenant-selection__actions {
+        margin-top: 1.4rem; padding-top: 1.2rem; display: flex; align-items: center; justify-content: space-between;
+        gap: 1.5rem; border-top: 1px solid var(--merlin-line);
+    }
+    .merlin-tenant-selection__actions p { max-width: 560px; color: var(--merlin-muted); font-size: .8rem; line-height: 1.55; }
+    .merlin-tenant-selection__actions button { flex: 0 0 auto; }
+
     @media (max-width: 900px) {
         .merlin-hero, .merlin-registration-grid { grid-template-columns: 1fr; }
         .merlin-hero { padding-top: 2rem; }
@@ -305,5 +351,12 @@
         .merlin-privacy-category > span { min-height: 4.8rem; }
         .merlin-privacy-actions { position: sticky; bottom: 0; padding: 1rem 1.35rem; flex-direction: column; }
         .merlin-privacy-button { width: 100%; }
+        .merlin-tenant-selection { margin-top: 1.5rem; }
+        .merlin-tenant-selection__card { padding: 1rem; border-radius: 1.1rem; }
+        .merlin-tenant-option__body { grid-template-columns: auto minmax(0, 1fr); }
+        .merlin-tenant-option__check { display: none; }
+        .merlin-tenant-option small { max-width: 13rem; }
+        .merlin-tenant-selection__actions { align-items: stretch; flex-direction: column; }
+        .merlin-tenant-selection__actions button { width: 100%; }
     }
 }

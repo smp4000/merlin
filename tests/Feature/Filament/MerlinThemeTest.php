@@ -6,6 +6,7 @@ use App\Enums\TenantType;
 use App\Filament\AvatarProviders\InitialsAvatarProvider;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
+use App\Filament\Platform\Pages\Dashboard as PlatformDashboard;
 use App\Models\LegalEntity;
 use App\Models\Station;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Modules\Tenants\Application\CreateTenant;
 use App\Modules\Tenants\Application\Data\CreateTenantData;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 /**
@@ -25,14 +27,25 @@ final class MerlinThemeTest extends TestCase
     /**
      * Das Panel muss Login, Dashboard und kompiliertes Merlin-Theme explizit registrieren.
      */
-    public function test_admin_panel_uses_merlin_ui_foundation(): void
+    public function test_partner_and_platform_panels_use_separate_merlin_foundations(): void
     {
-        $panel = Filament::getPanel('admin');
+        $partnerPanel = Filament::getPanel('admin');
+        $platformPanel = Filament::getPanel('platform');
 
-        $this->assertSame(Login::class, $panel->getLoginRouteAction());
-        $this->assertContains(Dashboard::class, $panel->getPages());
-        $this->assertSame('resources/css/filament/admin/theme.css', $panel->getViteTheme());
-        $this->assertSame(InitialsAvatarProvider::class, $panel->getDefaultAvatarProvider());
+        $this->assertSame(Login::class, $partnerPanel->getLoginRouteAction());
+        $this->assertContains(Dashboard::class, $partnerPanel->getPages());
+        $this->assertNotContains(PlatformDashboard::class, $partnerPanel->getPages());
+        $this->assertSame('resources/css/filament/admin/theme.css', $partnerPanel->getViteTheme());
+        $this->assertSame(InitialsAvatarProvider::class, $partnerPanel->getDefaultAvatarProvider());
+
+        $this->assertSame(Login::class, $platformPanel->getLoginRouteAction());
+        $this->assertContains(PlatformDashboard::class, $platformPanel->getPages());
+        $this->assertNotContains(Dashboard::class, $platformPanel->getPages());
+        $this->assertSame('resources/css/filament/admin/theme.css', $platformPanel->getViteTheme());
+        $this->assertFalse(Route::has('filament.admin.resources.partners.index'));
+        $this->assertFalse(Route::has('filament.admin.resources.bank-directory-sources.index'));
+        $this->assertTrue(Route::has('filament.platform.resources.partners.index'));
+        $this->assertTrue(Route::has('filament.platform.resources.bank-directory-sources.index'));
     }
 
     /**
@@ -52,6 +65,7 @@ final class MerlinThemeTest extends TestCase
     public function test_authenticated_user_sees_merlin_dashboard(): void
     {
         $user = User::factory()->create();
+        app(CreateTenant::class)->handle($user, new CreateTenantData('ATS', TenantType::SingleOperator));
 
         $this->actingAs($user)
             ->get('/admin/dashboard')
@@ -109,20 +123,21 @@ final class MerlinThemeTest extends TestCase
     }
 
     /**
-     * Ohne bewusste Auswahl dürfen mehrere Memberships nicht zu einer zufälligen
-     * Mandantenanzeige zusammenfallen.
+     * Die Plattformübersicht darf ohne Supportgrant keine operativen Tenantinhalte laden.
      */
-    public function test_dashboard_does_not_guess_a_tenant_when_user_has_multiple_memberships(): void
+    public function test_platform_dashboard_contains_no_tenant_content(): void
     {
-        $user = User::factory()->create();
-        app(CreateTenant::class)->handle($user, new CreateTenantData('Betrieb Nord', TenantType::SingleOperator));
-        app(CreateTenant::class)->handle($user, new CreateTenantData('Betrieb Süd', TenantType::SingleOperator));
+        $owner = User::factory()->create();
+        app(CreateTenant::class)->handle(
+            $owner,
+            new CreateTenantData('Vertraulicher Pilotbetrieb', TenantType::SingleOperator),
+        );
+        $platformAdmin = User::factory()->create(['is_platform_super_admin' => true]);
 
-        $this->actingAs($user)
-            ->get('/admin/dashboard')
+        $this->actingAs($platformAdmin)
+            ->get('/platform/dashboard')
             ->assertOk()
-            ->assertDontSee('Betrieb Nord ist eingerichtet.')
-            ->assertDontSee('Betrieb Süd ist eingerichtet.')
-            ->assertSee('Schritt 1 von 4');
+            ->assertSee('Plattform und Partnerdaten bleiben getrennt')
+            ->assertDontSee('Vertraulicher Pilotbetrieb');
     }
 }

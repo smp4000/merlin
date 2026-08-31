@@ -209,6 +209,73 @@
     text-transform: uppercase;
 }
 
+.merlin-tenant-switcher {
+    display: inline-grid;
+    min-width: 0;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.65rem;
+    margin-inline-start: 0.75rem;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--merlin-border);
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 0.78);
+}
+
+.merlin-tenant-switcher__mark {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 0.65rem;
+    color: var(--merlin-navy-deep);
+    background: var(--merlin-mint);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.merlin-tenant-switcher__copy {
+    display: grid;
+    min-width: 0;
+    line-height: 1.15;
+}
+
+.merlin-tenant-switcher__copy small {
+    color: var(--merlin-muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.merlin-tenant-switcher__copy strong {
+    max-width: 15rem;
+    overflow: hidden;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.merlin-tenant-switcher > a {
+    border-radius: 0.55rem;
+    padding: 0.4rem 0.5rem;
+    color: var(--merlin-petrol);
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+.merlin-tenant-switcher > a:hover,
+.merlin-tenant-switcher > a:focus-visible {
+    background: var(--merlin-mint);
+}
+
+.merlin-platform-boundary-copy {
+    margin-top: 1rem;
+    max-width: 58rem;
+    color: var(--merlin-muted);
+    line-height: 1.7;
+}
+
 .fi-sidebar .merlin-brand__copy small {
     color: rgb(255 255 255 / 0.48);
 }
@@ -483,6 +550,19 @@
 
     .merlin-progress__counter {
         display: none;
+    }
+
+    .merlin-tenant-switcher {
+        margin-inline-start: 0.25rem;
+    }
+
+    .merlin-tenant-switcher__copy small,
+    .merlin-tenant-switcher > a {
+        display: none;
+    }
+
+    .merlin-tenant-switcher__copy strong {
+        max-width: 8rem;
     }
 }
 

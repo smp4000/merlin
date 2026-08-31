@@ -5,7 +5,9 @@ namespace App\Providers\Filament;
 use App\Enums\ThemePalette;
 use App\Filament\AvatarProviders\InitialsAvatarProvider;
 use App\Filament\Pages\Auth\Login;
-use App\Filament\Pages\Dashboard;
+use App\Filament\Platform\Pages\Dashboard;
+use App\Filament\Resources\BankDirectorySources\BankDirectorySourceResource;
+use App\Filament\Resources\Partners\PartnerResource;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -21,27 +23,22 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 /**
- * Konfiguriert das derzeitige Merlin-Backoffice und bindet das eigene Produktdesign ein.
+ * Konfiguriert die von operativen Mandantendaten getrennte Plattformverwaltung.
  *
- * Das Panel bleibt bis zur Einführung der getrennten Plattform- und Partnerkontexte unter
- * der bestehenden Admin-Route erreichbar. Dadurch werden Authentifizierung und Pilotzugang
- * nicht vorzeitig mit einer noch nicht implementierten Mandantenauflösung vermischt.
+ * Das Panel enthält nur ausdrücklich registrierte globale Ressourcen. Eine spätere
+ * Mandanteneinsicht darf hier ausschließlich über einen gesonderten, zeitlich begrenzten
+ * Supportgrant ergänzt werden und entsteht niemals aus der Super-Admin-Rolle allein.
  */
-final class AdminPanelProvider extends PanelProvider
+final class PlatformPanelProvider extends PanelProvider
 {
     /**
-     * Stellt Navigation, Authentifizierung und die zentrale Merlin-Designgrundlage bereit.
-     *
-     * Die primäre Farbe stammt aus dem kontrollierten Palettenkatalog. Eine spätere
-     * mandantenbezogene Auswahl darf ausschließlich nach einem geprüften TenantContext
-     * erfolgen und ersetzt dann nur die freigegebenen Akzent-Tokens.
+     * Registriert Plattform-Metadaten und globale Kataloge unter dem eigenen Pfad.
      */
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('platform')
+            ->path('platform')
             ->login(Login::class)
             ->brandName(__('merlin.brand.name'))
             ->brandLogo(fn () => view('filament.components.brand'))
@@ -56,12 +53,13 @@ final class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => ThemePalette::default()->colors(),
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            ->resources([
+                PartnerResource::class,
+                BankDirectorySourceResource::class,
+            ])
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -75,6 +73,6 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ], isPersistent: true);
     }
 }

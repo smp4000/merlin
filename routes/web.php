@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\LegalDocumentController;
+use App\Http\Controllers\PartnerOnboardingController;
 use App\Http\Controllers\PartnerRegistrationConfirmationController;
 use App\Http\Controllers\PartnerRegistrationController;
-use App\Http\Controllers\PartnerOnboardingController;
+use App\Http\Controllers\TenantSelectionController;
+use App\Http\Middleware\EnsureActiveTenantContext;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,10 +13,18 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::get('/onboarding', [PartnerOnboardingController::class, 'show'])->name('onboarding.show');
-    Route::post('/onboarding', [PartnerOnboardingController::class, 'store'])
+    Route::get('/betrieb-auswaehlen', [TenantSelectionController::class, 'show'])
+        ->name('tenant-selection.show');
+    Route::post('/betrieb-auswaehlen', [TenantSelectionController::class, 'store'])
         ->middleware('throttle:30,1')
-        ->name('onboarding.store');
+        ->name('tenant-selection.store');
+
+    Route::middleware(EnsureActiveTenantContext::class)->group(function (): void {
+        Route::get('/onboarding', [PartnerOnboardingController::class, 'show'])->name('onboarding.show');
+        Route::post('/onboarding', [PartnerOnboardingController::class, 'store'])
+            ->middleware('throttle:30,1')
+            ->name('onboarding.store');
+    });
 });
 
 Route::get('/nutzungsbedingungen', [LegalDocumentController::class, 'show'])

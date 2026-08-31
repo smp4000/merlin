@@ -58,7 +58,7 @@ final class LocalAdminSeederTest extends TestCase
 
         $admin = User::query()->where('email', 'admin@example.test')->sole();
 
-        Filament::setCurrentPanel(Filament::getPanel('admin'));
+        Filament::setCurrentPanel(Filament::getPanel('platform'));
 
         Livewire::test(Login::class)
             ->set('data.email', 'admin@example.test')
