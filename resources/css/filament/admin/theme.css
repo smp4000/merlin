@@ -576,3 +576,417 @@
         animation-iteration-count: 1 !important;
     }
 }
+
+/* Tankstellenverwaltung: eigenständige Karten-, Such- und Formularsprache. */
+.merlin-station-heading,
+.merlin-search-panel,
+.merlin-form-panel,
+.merlin-station-card,
+.merlin-empty-state {
+    border: 1px solid var(--merlin-border);
+    border-radius: var(--merlin-radius-lg);
+    background: rgb(255 255 255 / 0.94);
+    box-shadow: var(--merlin-shadow-soft);
+}
+
+.merlin-station-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(1.35rem, 3vw, 2.2rem);
+}
+
+.merlin-station-heading h2,
+.merlin-search-panel h2,
+.merlin-form-panel h2 {
+    color: var(--merlin-navy-deep);
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    font-weight: 780;
+    letter-spacing: -0.035em;
+}
+
+.merlin-station-heading p,
+.merlin-search-panel__intro p,
+.merlin-form-panel__heading p,
+.merlin-form-panel > p {
+    max-width: 48rem;
+    margin-top: 0.55rem;
+    color: var(--merlin-muted);
+    line-height: 1.6;
+}
+
+.merlin-primary-button,
+.merlin-secondary-button,
+.merlin-text-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.85rem;
+    font-size: 0.86rem;
+    font-weight: 750;
+    transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.merlin-primary-button {
+    min-height: 2.8rem;
+    padding: 0.72rem 1.05rem;
+    background: var(--merlin-petrol);
+    color: white;
+    box-shadow: 0 0.55rem 1.2rem rgb(15 118 110 / 0.18);
+}
+
+.merlin-secondary-button {
+    min-height: 2.55rem;
+    border: 1px solid var(--merlin-border-strong);
+    padding: 0.62rem 0.9rem;
+    background: white;
+    color: var(--merlin-navy-deep);
+}
+
+.merlin-text-button,
+.merlin-back-link {
+    color: var(--merlin-petrol);
+    font-weight: 700;
+}
+
+.merlin-text-button {
+    margin-top: 1.2rem;
+    padding: 0.55rem 0;
+}
+
+.merlin-primary-button:hover,
+.merlin-secondary-button:hover {
+    transform: translateY(-1px);
+}
+
+.merlin-primary-button:focus-visible,
+.merlin-secondary-button:focus-visible,
+.merlin-text-button:focus-visible,
+.merlin-back-link:focus-visible,
+.merlin-station-create input:focus,
+.merlin-station-create select:focus,
+.merlin-station-create textarea:focus {
+    outline: 3px solid rgb(45 212 191 / 0.28);
+    outline-offset: 2px;
+}
+
+.merlin-station-list,
+.merlin-station-create {
+    display: grid;
+    gap: 1rem;
+}
+
+.merlin-station-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.1rem;
+    padding: 1.25rem;
+}
+
+.merlin-station-card__brand {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    border-radius: 1rem;
+    background: var(--merlin-mint);
+    color: var(--merlin-petrol);
+    font-size: 1rem;
+    font-weight: 850;
+}
+
+.merlin-station-card__title,
+.merlin-station-card__actions,
+.merlin-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.merlin-station-card h3 {
+    color: var(--merlin-navy-deep);
+    font-size: 1.05rem;
+    font-weight: 780;
+}
+
+.merlin-station-card p,
+.merlin-station-meta dt,
+.merlin-linked-note {
+    color: var(--merlin-muted);
+    font-size: 0.8rem;
+}
+
+.merlin-status-badge,
+.merlin-open-state {
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+.merlin-status-badge.is-active,
+.merlin-open-state.is-open {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.merlin-status-badge.is-draft {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.merlin-open-state.is-closed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.merlin-station-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.merlin-station-meta > div {
+    border-radius: 0.8rem;
+    padding: 0.75rem;
+    background: #f7faf9;
+}
+
+.merlin-station-meta dd {
+    margin-top: 0.2rem;
+    color: var(--merlin-navy-deep);
+    font-size: 0.83rem;
+    font-weight: 700;
+}
+
+.merlin-station-card__actions {
+    margin-top: 1rem;
+}
+
+.merlin-empty-state {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.merlin-empty-state > span {
+    display: grid;
+    width: 3.4rem;
+    height: 3.4rem;
+    margin: 0 auto 1rem;
+    place-items: center;
+    border-radius: 1.1rem;
+    background: var(--merlin-mint);
+    color: var(--merlin-petrol);
+    font-weight: 850;
+}
+
+.merlin-empty-state h3 {
+    color: var(--merlin-navy-deep);
+    font-size: 1.1rem;
+    font-weight: 780;
+}
+
+.merlin-empty-state p {
+    margin: 0.45rem 0 1.2rem;
+    color: var(--merlin-muted);
+}
+
+.merlin-back-link {
+    width: fit-content;
+    margin-bottom: 0.2rem;
+}
+
+.merlin-search-panel,
+.merlin-form-panel {
+    padding: clamp(1.3rem, 3vw, 2rem);
+}
+
+.merlin-search-form {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 0.6fr) auto;
+    gap: 0.9rem;
+    align-items: end;
+    margin-top: 1.4rem;
+}
+
+.merlin-station-create label {
+    display: grid;
+    gap: 0.38rem;
+    color: var(--merlin-navy-deep);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.merlin-station-create input,
+.merlin-station-create select,
+.merlin-station-create textarea {
+    width: 100%;
+    border: 1px solid var(--merlin-border-strong);
+    border-radius: 0.8rem;
+    background: white;
+    color: var(--merlin-navy-deep);
+    font-size: 0.9rem;
+}
+
+.merlin-station-create input,
+.merlin-station-create select {
+    min-height: 2.8rem;
+    padding: 0.65rem 0.75rem;
+}
+
+.merlin-station-create textarea {
+    padding: 0.75rem;
+}
+
+.merlin-field-error {
+    color: #b91c1c;
+    font-weight: 650;
+}
+
+.merlin-notice {
+    margin-top: 1rem;
+    border-left: 4px solid;
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+.merlin-notice.is-warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+    color: #854d0e;
+}
+
+.merlin-notice.is-error {
+    border-color: #ef4444;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.merlin-search-results {
+    margin-top: 1.4rem;
+}
+
+.merlin-search-results > h3 {
+    color: var(--merlin-navy-deep);
+    font-weight: 780;
+}
+
+.merlin-search-results__list {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 0.8rem;
+}
+
+.merlin-search-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid var(--merlin-border);
+    border-radius: 0.9rem;
+    padding: 0.9rem;
+    background: #f9fbfb;
+}
+
+.merlin-search-result h4 {
+    color: var(--merlin-navy-deep);
+    font-weight: 750;
+}
+
+.merlin-search-result p {
+    margin: 0.2rem 0 0.45rem;
+    color: var(--merlin-muted);
+    font-size: 0.8rem;
+}
+
+.merlin-form-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 1.4rem 0;
+    border-radius: 1rem;
+    padding: 0.45rem;
+    background: #f3f7f6;
+}
+
+.merlin-form-tabs span {
+    border-radius: 0.7rem;
+    padding: 0.7rem;
+    color: var(--merlin-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.merlin-form-tabs span.is-active {
+    background: white;
+    color: var(--merlin-petrol);
+    box-shadow: var(--merlin-shadow-soft);
+}
+
+.merlin-form-grid,
+.merlin-comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.merlin-form-grid .is-wide {
+    grid-column: 1 / -1;
+}
+
+.merlin-form-actions {
+    margin-top: 1.5rem;
+}
+
+.merlin-comparison-grid {
+    margin: 1.2rem 0;
+}
+
+.merlin-comparison-grid article {
+    display: grid;
+    gap: 0.35rem;
+    border: 1px solid var(--merlin-border);
+    border-radius: 0.9rem;
+    padding: 1rem;
+    background: #f9fbfb;
+}
+
+.merlin-comparison-grid span {
+    color: var(--merlin-navy-deep);
+    font-weight: 750;
+}
+
+.merlin-comparison-grid small {
+    color: var(--merlin-muted);
+}
+
+@media (max-width: 767px) {
+    .merlin-station-heading,
+    .merlin-station-card__title,
+    .merlin-search-result,
+    .merlin-form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .merlin-search-form,
+    .merlin-form-grid,
+    .merlin-comparison-grid,
+    .merlin-station-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .merlin-station-card {
+        grid-template-columns: 1fr;
+    }
+
+    .merlin-form-tabs {
+        grid-template-columns: 1fr;
+    }
+}

@@ -77,6 +77,12 @@ final class Tenant extends Model
         return $this->hasMany(LegalEntity::class);
     }
 
+    /** Liefert alle operativen Stationen dieses isolierten Mandanten. */
+    public function stations(): HasMany
+    {
+        return $this->hasMany(Station::class);
+    }
+
     /**
      * @return array<string, string>
      */

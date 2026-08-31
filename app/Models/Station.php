@@ -41,4 +41,23 @@ final class Station extends Model
     {
         return $this->hasMany(StationContact::class);
     }
+
+    /** Liefert die tenantgebundenen externen Quellenbezüge dieser Station. */
+    public function sourceReferences(): HasMany
+    {
+        return $this->hasMany(StationSourceReference::class);
+    }
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
+            'source_verified_at' => 'immutable_datetime',
+            'source_checked_by_user_at' => 'immutable_datetime',
+            'activated_at' => 'immutable_datetime',
+            'closed_at' => 'immutable_datetime',
+        ];
+    }
 }

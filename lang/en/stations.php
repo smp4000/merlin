@@ -1,0 +1,62 @@
+<?php
+
+return [
+    'navigation' => ['label' => 'Fuel stations', 'group' => 'Organisation'],
+    'overview' => [
+        'title' => 'Fuel stations', 'eyebrow' => 'Locations', 'heading' => 'Your fuel stations',
+        'introduction' => 'Manage locations, operators and optional directory links.',
+        'aria_label' => 'Fuel stations of the active organisation',
+        'empty_heading' => 'No fuel station yet',
+        'empty_description' => 'Search for a location or create one manually.',
+    ],
+    'create' => [
+        'title' => 'Create fuel station', 'eyebrow' => 'New location',
+        'details_eyebrow' => 'Station draft', 'details_heading' => 'Review master data',
+        'manual_description' => 'This location is entered without an external search.',
+        'search_description' => 'Search values are suggestions. Review all fields before saving.',
+        'tabs_label' => 'Station creation sections',
+    ],
+    'link' => [
+        'title' => 'Link station directory', 'eyebrow' => 'Optional link',
+        'heading' => 'Search directory for :station', 'review_eyebrow' => 'Review first',
+        'review_heading' => 'Compare directory and master data',
+        'no_overwrite' => 'Linking does not overwrite existing master data.',
+        'current_data' => 'Current Merlin data', 'directory_data' => 'Directory entry',
+    ],
+    'search' => [
+        'heading' => 'Search fuel station',
+        'source_note' => 'The search queries benzinpreis-aktuell.de. You can continue without search.',
+        'disabled' => 'The optional search is currently disabled. You can create the station manually.',
+        'unavailable' => 'The search is currently unavailable. Please continue manually.',
+        'radius_limit_warning' => 'The source reliably supplies up to 20 km; results may be missing for 25 km.',
+        'radius_approximation_warning' => 'The source does not support :radius km exactly. Merlin uses the next larger available range.',
+        'rate_limited' => 'Too many searches. Please wait and try again.',
+        'read_only' => 'Your trial has ended. Stations remain visible, but changes are disabled in read-only mode.',
+        'result_count' => '{0} No results|{1} One result|[2,*] :count results',
+    ],
+    'actions' => [
+        'create' => 'Create fuel station', 'search' => 'Search stations', 'searching' => 'Searching …',
+        'select' => 'Select station', 'manual' => 'Create manually without search',
+        'link_directory' => 'Link station directory', 'confirm_link' => 'Confirm link',
+        'save_draft' => 'Save draft', 'cancel' => 'Cancel', 'back' => 'Back to overview',
+    ],
+    'fields' => [
+        'legal_entity' => 'Legal operator', 'brand' => 'Brand', 'name' => 'Station name',
+        'short_name' => 'Short name', 'street' => 'Street', 'house_number' => 'House number',
+        'postal_code' => 'Postal code', 'city' => 'City', 'region' => 'Region',
+        'radius' => 'Search radius', 'source' => 'Source', 'duplicate_reason' => 'Reason',
+    ],
+    'tabs' => ['general' => 'General', 'address' => 'Address', 'review' => 'Review'],
+    'statuses' => ['draft' => 'Draft', 'review' => 'In review', 'active' => 'Active', 'temporarily_closed' => 'Temporarily closed', 'closed' => 'Closed'],
+    'sources' => ['onboarding' => 'Registration', 'manual' => 'Manual', 'external_search' => 'Station directory', 'import' => 'Import'],
+    'values' => ['not_assigned' => 'Not assigned', 'please_select' => 'Please select', 'directory_linked' => 'Directory linked', 'open' => 'Open', 'closed' => 'Closed'],
+    'duplicate' => ['heading' => 'Possible duplicate station', 'description' => 'A station already exists at this address. Please provide a reason to continue.'],
+    'validation' => [
+        'legal_entity_invalid' => 'The selected operator is unavailable.', 'brand_invalid' => 'The selected brand is unavailable.',
+        'external_duplicate' => 'This directory entry is already linked.', 'reference_invalid' => 'The search result is invalid. Please search again.',
+        'reference_expired' => 'The search result expired. Please search again.', 'station_invalid' => 'The station is unavailable.',
+        'duplicate_reason_required' => 'Please provide a reason.', 'postal_code' => 'Enter a valid five-digit postal code.',
+        'radius' => 'Select an available search radius.',
+    ],
+    'notifications' => ['created' => 'Station draft saved.', 'linked' => 'Station directory linked.'],
+];

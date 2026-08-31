@@ -1,5 +1,10 @@
 # Stationsstammdaten
 
+Der Such-, Übernahme- und Dublettenprozess für neue Standorte ist im
+[Blueprint Tankstellenverwaltung mit Standortsuche](20-tankstellenverwaltung-suche-blueprint.md)
+beschrieben. Eine externe Suche bleibt eine Eingabehilfe; bestätigte Stammdaten werden
+nicht automatisch durch Anbieterdaten überschrieben.
+
 Dieses Konzept übernimmt ausschließlich Feldstrukturen, keine realen Produktionswerte.
 Nach bestätigter E-Mail startet der Trial automatisch; der Partner legt seine Station
 selbst an. Die Station beginnt als Entwurf und wird nach Pflichtfeldprüfung aktiviert.

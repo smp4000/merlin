@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Modules\Stations\Contracts\StationSearchProvider;
+use App\Modules\Stations\Infrastructure\BenzinpreisAktuellStationSearchProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -12,6 +14,12 @@ use Illuminate\Support\ServiceProvider;
  */
 class AppServiceProvider extends ServiceProvider
 {
+    /** Bindet austauschbare Fachverträge an die freigegebenen Pilotadapter. */
+    public function register(): void
+    {
+        $this->app->bind(StationSearchProvider::class, BenzinpreisAktuellStationSearchProvider::class);
+    }
+
     /**
      * Begrenzt Registrierungs- und Tokenversuche unabhängig nach IP und pseudonymem Schlüssel.
      *

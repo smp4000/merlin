@@ -67,4 +67,24 @@ return [
             'https://www.bundesbank.de/resource/blob/926192/b27b518a016ea7ca7af321eb7289fcf4/472B63F073F071307366337C94F8C870/blz-aktuell-csv-data.csv',
         ),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Optionale Tankstellen-Stammdatensuche
+    |--------------------------------------------------------------------------
+    |
+    | Der Pilotadapter liest ausschließlich Standortstammdaten und verwirft Preise.
+    | Er bleibt zentral abschaltbar, weil die externe HTML-Struktur keine garantierte
+    | Schnittstelle ist und vor Produktion eine Nutzungsfreigabe benötigt.
+    |
+    */
+    'station_search' => [
+        'enabled' => env('STATION_SEARCH_ENABLED', false),
+        'provider' => 'benzinpreis_aktuell',
+        'base_url' => 'https://www.benzinpreis-aktuell.de',
+        'allowed_host' => 'www.benzinpreis-aktuell.de',
+        'radii' => [2, 5, 10, 15, 20, 25],
+        'timeout_seconds' => 12,
+        'cache_minutes' => 15,
+    ],
 ];
