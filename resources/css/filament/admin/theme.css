@@ -10,8 +10,13 @@
 :root {
     --merlin-navy: #102a43;
     --merlin-navy-deep: #081d2d;
-    --merlin-petrol: #0f766e;
-    --merlin-mint: #ccfbf1;
+    --merlin-accent: #0f766e;
+    --merlin-accent-hover: #115e59;
+    --merlin-accent-soft: #ccfbf1;
+    --merlin-accent-soft-strong: #99f6e4;
+    --merlin-accent-focus: #5eead4;
+    --merlin-petrol: var(--merlin-accent);
+    --merlin-mint: var(--merlin-accent-soft);
     --merlin-surface: #f4f8f9;
     --merlin-border: #dbe7e9;
     --merlin-muted: #5f7380;
@@ -23,7 +28,7 @@
 
 .fi-body {
     background:
-        radial-gradient(circle at 85% 0%, rgb(204 251 241 / 0.5), transparent 28rem),
+        radial-gradient(circle at 85% 0%, color-mix(in oklab, var(--merlin-accent-soft), transparent 48%), transparent 28rem),
         var(--merlin-surface);
     color: var(--merlin-navy-deep);
 }
@@ -57,7 +62,7 @@
 }
 
 .fi-sidebar-group-label {
-    color: rgb(204 251 241 / 0.58);
+    color: color-mix(in oklab, var(--merlin-accent-soft), transparent 38%);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.09em;
@@ -81,8 +86,8 @@
 }
 
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-    background: rgb(45 212 191 / 0.16);
-    box-shadow: inset 3px 0 0 #5eead4;
+    background: color-mix(in oklab, var(--merlin-accent), transparent 82%);
+    box-shadow: inset 3px 0 0 var(--merlin-accent-focus);
 }
 
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label,
@@ -633,7 +638,7 @@
     padding: 0.72rem 1.05rem;
     background: var(--merlin-petrol);
     color: white;
-    box-shadow: 0 0.55rem 1.2rem rgb(15 118 110 / 0.18);
+    box-shadow: 0 0.55rem 1.2rem color-mix(in oklab, var(--merlin-accent), transparent 78%);
 }
 
 .merlin-secondary-button {
@@ -660,6 +665,10 @@
     transform: translateY(-1px);
 }
 
+.merlin-primary-button:hover {
+    background: var(--merlin-accent-hover);
+}
+
 .merlin-primary-button:focus-visible,
 .merlin-secondary-button:focus-visible,
 .merlin-text-button:focus-visible,
@@ -667,7 +676,7 @@
 .merlin-station-create input:focus,
 .merlin-station-create select:focus,
 .merlin-station-create textarea:focus {
-    outline: 3px solid rgb(45 212 191 / 0.28);
+    outline: 3px solid color-mix(in oklab, var(--merlin-accent-focus), transparent 55%);
     outline-offset: 2px;
 }
 
@@ -1099,6 +1108,175 @@
     color: var(--merlin-muted);
 }
 
+.merlin-station-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--merlin-border);
+    border-radius: var(--merlin-radius-lg);
+    background: rgb(255 255 255 / 0.96);
+    box-shadow: var(--merlin-shadow-soft);
+}
+
+.merlin-station-table-wrap:focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--merlin-accent-focus), transparent 45%);
+    outline-offset: 3px;
+}
+
+.merlin-station-table {
+    width: 100%;
+    min-width: 70rem;
+    border-collapse: collapse;
+    color: var(--merlin-navy-deep);
+    font-size: 0.8rem;
+}
+
+.merlin-station-table th,
+.merlin-station-table td {
+    border-bottom: 1px solid var(--merlin-border);
+    padding: 0.9rem 0.8rem;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.merlin-station-table thead th {
+    background: #f4f8f8;
+    color: var(--merlin-muted);
+    font-size: 0.7rem;
+    font-weight: 780;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+}
+
+.merlin-station-table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.merlin-station-table tbody tr:hover {
+    background: color-mix(in oklab, var(--merlin-accent-soft), white 72%);
+}
+
+.merlin-station-table td small {
+    color: var(--merlin-muted);
+}
+
+.merlin-table-station {
+    display: flex;
+    min-width: 12rem;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.merlin-table-station > span {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 0.7rem;
+    background: var(--merlin-accent-soft);
+    color: var(--merlin-accent);
+    font-weight: 850;
+}
+
+.merlin-station-table__action {
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+.merlin-appearance {
+    display: grid;
+    gap: 1.25rem;
+    border: 1px solid var(--merlin-border);
+    border-radius: var(--merlin-radius-lg);
+    padding: clamp(1.3rem, 3vw, 2rem);
+    background: rgb(255 255 255 / 0.95);
+    box-shadow: var(--merlin-shadow-soft);
+}
+
+.merlin-appearance__heading h2,
+.merlin-theme-preview h3 {
+    color: var(--merlin-navy-deep);
+    font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+    font-weight: 780;
+}
+
+.merlin-appearance__heading p,
+.merlin-theme-preview p {
+    margin-top: 0.45rem;
+    color: var(--merlin-muted);
+    line-height: 1.55;
+}
+
+.merlin-palette-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    border: 0;
+    padding: 0;
+}
+
+.merlin-palette-option {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.15rem 0.7rem;
+    align-items: center;
+    border: 2px solid var(--merlin-border);
+    border-radius: 1rem;
+    padding: 0.9rem;
+    background: #f9fbfb;
+    cursor: pointer;
+}
+
+.merlin-palette-option:has(input:checked) {
+    border-color: var(--preview-accent);
+    background: color-mix(in oklab, var(--preview-soft), white 55%);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--preview-accent), transparent 85%);
+}
+
+.merlin-palette-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.merlin-palette-option:has(input:focus-visible) {
+    outline: 3px solid var(--preview-accent);
+    outline-offset: 2px;
+}
+
+.merlin-palette-option__swatch {
+    width: 2.2rem;
+    height: 2.2rem;
+    grid-row: 1 / 3;
+    border: 5px solid var(--preview-soft);
+    border-radius: 999px;
+    background: var(--preview-accent);
+}
+
+.merlin-palette-option strong {
+    color: var(--merlin-navy-deep);
+    font-size: 0.85rem;
+}
+
+.merlin-palette-option small {
+    color: var(--merlin-muted);
+    font-size: 0.72rem;
+}
+
+.merlin-theme-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(12rem, 0.55fr);
+    gap: 1rem;
+    align-items: end;
+    border: 1px solid color-mix(in oklab, var(--merlin-accent), transparent 70%);
+    border-radius: 1.1rem;
+    padding: 1.2rem;
+    background: color-mix(in oklab, var(--merlin-accent-soft), white 62%);
+}
+
+.merlin-theme-preview .merlin-eyebrow {
+    color: var(--merlin-accent);
+}
+
 @media (max-width: 767px) {
     .merlin-station-heading,
     .merlin-station-card__title,
@@ -1114,6 +1292,11 @@
     .merlin-comparison-grid,
     .merlin-station-review,
     .merlin-station-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .merlin-palette-grid,
+    .merlin-theme-preview {
         grid-template-columns: 1fr;
     }
 

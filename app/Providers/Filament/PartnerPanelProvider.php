@@ -6,6 +6,7 @@ use App\Enums\ThemePalette;
 use App\Filament\AvatarProviders\InitialsAvatarProvider;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
+use App\Foundation\Settings\TenantTheme;
 use App\Foundation\Tenancy\AccessibleTenantMemberships;
 use App\Foundation\Tenancy\TenantContext;
 use App\Http\Middleware\EnsureActiveTenantContext;
@@ -70,6 +71,12 @@ final class PartnerPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): View => view('filament.components.tenant-theme', [
+                    'palette' => app(TenantTheme::class)->current(),
+                ]),
+            )
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
                 function (): View {

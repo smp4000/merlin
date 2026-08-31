@@ -69,6 +69,12 @@ final class Tenant extends Model
         return $this->hasOne(TenantBusinessContact::class);
     }
 
+    /** Liefert die mandantenweit wirksame, geprüfte Darstellungseinstellung. */
+    public function appearanceSetting(): HasOne
+    {
+        return $this->hasOne(TenantAppearanceSetting::class);
+    }
+
     /**
      * Liefert alle rechtlichen Gesellschaften innerhalb dieses Mandanten.
      */

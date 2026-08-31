@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Speichert das geprüfte Farbschema genau einmal je Mandant.
+ *
+ * Freie Farbwerte werden absichtlich nicht persistiert. Der Anwendungscode akzeptiert nur
+ * Schlüssel aus ThemePalette und verhindert damit CSS-Injection sowie unlesbare Kontraste.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tenant_appearance_settings', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('tenant_id')->unique()->constrained()->cascadeOnDelete();
+            $table->string('theme_key', 40)->default('merlin-petrol');
+            $table->foreignId('updated_by_user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tenant_appearance_settings');
+    }
+};

@@ -729,3 +729,13 @@ Nach erfolgreicher Abnahme des Partnerkerns folgen jeweils separat geplant und g
 Keiner dieser nachgelagerten Schnitte wird stillschweigend in den Partnerkern gezogen.
 Jeder erhält vor Implementierung eigene Datenflüsse, Missbrauchsfälle, Tests und eine
 ausdrückliche Freigabe.
+
+### Freigegebener Pilotschnitt Erscheinungsbild
+
+Auf ausdrücklichen Pilotwunsch ist aus Punkt 4 ausschließlich das mandantenweite
+Farbschema vorgezogen. Es speichert einen geprüften `ThemePalette`-Schlüssel je Tenant,
+ist zunächst nur für die wirksame Administrator-Membership sichtbar, respektiert den
+zentralen Nur-Lesen-Schutz und auditiert alten sowie neuen Schlüssel. Freie HEX-Werte,
+CSS oder JavaScript werden nicht akzeptiert. Die Anmeldung und das Plattform-Panel bleiben
+neutral; Statusfarben ändern sich nicht. Sprache und regionale Werte bleiben weiterhin
+ein eigener nachgelagerter Schnitt.

@@ -57,6 +57,31 @@ final class StationPagesTest extends TestCase
         }
     }
 
+    public function test_overview_switches_from_cards_to_table_only_after_second_station(): void
+    {
+        [$user, $tenant, $entity] = $this->partner('Tabellenbetrieb');
+        $this->station($tenant, $entity, 'Station Eins');
+        $this->station($tenant, $entity, 'Station Zwei');
+
+        $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->get('/admin/stationen')
+            ->assertOk()
+            ->assertSee('merlin-station-card', false)
+            ->assertDontSee('merlin-station-table', false);
+
+        $this->station($tenant, $entity, 'Station Drei');
+
+        $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->get('/admin/stationen')
+            ->assertOk()
+            ->assertSee('merlin-station-table', false)
+            ->assertDontSee('merlin-station-card', false)
+            ->assertSeeText('Station Eins')
+            ->assertSeeText('Station Drei');
+    }
+
     public function test_guest_cannot_open_station_management(): void
     {
         $this->get('/admin/stationen')->assertRedirect('/admin/login');

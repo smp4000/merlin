@@ -54,4 +54,25 @@ enum ThemePalette: string
             self::Graphite => Color::Slate,
         };
     }
+
+    /**
+     * Liefert ausschließlich geprüfte CSS-Werte für das mandantenbezogene Merlin-Theme.
+     *
+     * Die Werte stammen aus dem festen Farbkatalog und niemals aus freiem Benutzereingang.
+     * Dadurch kann die Oberfläche sie ohne CSS-Injection-Risiko als Variablen ausgeben.
+     *
+     * @return array<string, string>
+     */
+    public function cssVariables(): array
+    {
+        $colors = $this->colors();
+
+        return [
+            'accent' => $colors[700],
+            'accent_hover' => $colors[800],
+            'accent_soft' => $colors[100],
+            'accent_soft_strong' => $colors[200],
+            'accent_focus' => $colors[300],
+        ];
+    }
 }

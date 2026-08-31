@@ -11,7 +11,15 @@
     </section>
 
     <section class="merlin-station-list" aria-label="{{ __('stations.overview.aria_label') }}">
-        @forelse ($stations as $station)
+        @if ($stations->isEmpty())
+            <div class="merlin-empty-state">
+                <span aria-hidden="true">T</span>
+                <h3>{{ __('stations.overview.empty_heading') }}</h3>
+                <p>{{ __('stations.overview.empty_description') }}</p>
+                <a class="merlin-primary-button" href="{{ $createUrl }}" wire:navigate>{{ __('stations.actions.create') }}</a>
+            </div>
+        @elseif ($stations->count() <= 2)
+            @foreach ($stations as $station)
             <article class="merlin-station-card">
                 <div class="merlin-station-card__brand" aria-hidden="true">
                     {{ mb_substr($station->brand?->name ?? $station->name, 0, 1) }}
@@ -53,13 +61,53 @@
                     </div>
                 </div>
             </article>
-        @empty
-            <div class="merlin-empty-state">
-                <span aria-hidden="true">T</span>
-                <h3>{{ __('stations.overview.empty_heading') }}</h3>
-                <p>{{ __('stations.overview.empty_description') }}</p>
-                <a class="merlin-primary-button" href="{{ $createUrl }}" wire:navigate>{{ __('stations.actions.create') }}</a>
+            @endforeach
+        @else
+            <div class="merlin-station-table-wrap" role="region" tabindex="0" aria-label="{{ __('stations.overview.table_aria_label') }}">
+                <table class="merlin-station-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ __('stations.fields.name') }}</th>
+                            <th scope="col">{{ __('stations.tabs.address') }}</th>
+                            <th scope="col">{{ __('stations.fields.brand') }}</th>
+                            <th scope="col">{{ __('stations.fields.legal_entity') }}</th>
+                            <th scope="col">{{ __('stations.fields.source') }}</th>
+                            <th scope="col">{{ __('stations.fields.status') }}</th>
+                            <th scope="col"><span class="sr-only">{{ __('stations.fields.actions') }}</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($stations as $station)
+                            <tr>
+                                <th scope="row">
+                                    <span class="merlin-table-station">
+                                        <span aria-hidden="true">{{ mb_substr($station->brand?->name ?? $station->name, 0, 1) }}</span>
+                                        <strong>{{ $station->name }}</strong>
+                                    </span>
+                                </th>
+                                <td>{{ $station->street }} {{ $station->house_number }}<br><small>{{ $station->postal_code }} {{ $station->city }}</small></td>
+                                <td>{{ $station->brand?->name ?? __('stations.values.not_assigned') }}</td>
+                                <td>{{ $station->legalEntity?->legal_name ?? __('stations.values.not_assigned') }}</td>
+                                <td>{{ __('stations.sources.'.$station->source_type) }}</td>
+                                <td>
+                                    <span class="merlin-status-badge is-{{ $station->status }}">
+                                        {{ __('stations.statuses.'.$station->status) }}
+                                    </span>
+                                </td>
+                                <td class="merlin-station-table__action">
+                                    @if ($station->sourceReferences->isEmpty())
+                                        <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
+                                            {{ __('stations.actions.link_short') }}
+                                        </a>
+                                    @else
+                                        <span class="merlin-linked-note">{{ __('stations.values.directory_linked_short') }}</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-        @endforelse
+        @endif
     </section>
 </x-filament-panels::page>

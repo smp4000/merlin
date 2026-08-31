@@ -292,9 +292,11 @@ Technische Schutzmaßnahmen:
 
 ### Übersicht
 
-Die Liste zeigt aktive Station, Name, Brand, Ort, Betreiber, Status und letzte Änderung.
-Der während des Onboardings angelegte Standort ist sofort sichtbar. Tenantweite Suche,
-Filter und Stapelaktionen bleiben durch Policies geschützt.
+Die Übersicht zeigt aktive Station, Name, Brand, Ort, Betreiber, Status und Quelle. Bei
+höchstens zwei Stationen nutzt Merlin die visuell ausführlichen Standortkarten. Ab drei
+Stationen wechselt dieselbe tenantgebundene Datenmenge automatisch in eine kompakte,
+horizontal zugängliche Tabelle. Der während des Onboardings angelegte Standort ist sofort
+sichtbar. Tenantweite Suche, Filter und Stapelaktionen bleiben durch Policies geschützt.
 
 ### Suchtrefferliste
 

@@ -8,6 +8,7 @@ return [
         'aria_label' => 'Fuel stations of the active organisation',
         'empty_heading' => 'No fuel station yet',
         'empty_description' => 'Search for a location or create one manually.',
+        'table_aria_label' => 'Fuel station table for the active organisation',
     ],
     'create' => [
         'title' => 'Create fuel station', 'eyebrow' => 'New location',
@@ -46,7 +47,7 @@ return [
     'actions' => [
         'create' => 'Create fuel station', 'search' => 'Search stations', 'searching' => 'Searching …',
         'select' => 'Select station', 'manual' => 'Create manually without search',
-        'link_directory' => 'Link station directory', 'confirm_link' => 'Confirm link',
+        'link_directory' => 'Link station directory', 'link_short' => 'Link', 'confirm_link' => 'Confirm link',
         'save_draft' => 'Save draft', 'change_selection' => 'Change selection',
         'previous' => 'Back', 'next' => 'Continue', 'cancel' => 'Cancel', 'back' => 'Back to overview',
     ],
@@ -55,12 +56,13 @@ return [
         'short_name' => 'Short name', 'street' => 'Street', 'house_number' => 'House number',
         'address_addition' => 'Address addition',
         'postal_code' => 'Postal code', 'city' => 'City', 'region' => 'Region',
-        'radius' => 'Search radius', 'source' => 'Source', 'duplicate_reason' => 'Reason',
+        'radius' => 'Search radius', 'source' => 'Source', 'status' => 'Status', 'actions' => 'Actions',
+        'duplicate_reason' => 'Reason',
     ],
     'tabs' => ['general' => 'General', 'address' => 'Address', 'review' => 'Review'],
     'statuses' => ['draft' => 'Draft', 'review' => 'In review', 'active' => 'Active', 'temporarily_closed' => 'Temporarily closed', 'closed' => 'Closed'],
     'sources' => ['onboarding' => 'Registration', 'manual' => 'Manual', 'external_search' => 'Station directory', 'import' => 'Import'],
-    'values' => ['not_assigned' => 'Not assigned', 'please_select' => 'Please select', 'directory_linked' => 'Directory linked', 'open' => 'Open', 'closed' => 'Closed'],
+    'values' => ['not_assigned' => 'Not assigned', 'please_select' => 'Please select', 'directory_linked' => 'Directory linked', 'directory_linked_short' => 'Linked', 'open' => 'Open', 'closed' => 'Closed'],
     'duplicate' => ['heading' => 'Possible duplicate station', 'description' => 'A station already exists at this address. Please provide a reason to continue.'],
     'validation' => [
         'legal_entity_invalid' => 'The selected operator is unavailable.', 'brand_invalid' => 'The selected brand is unavailable.',

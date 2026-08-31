@@ -45,4 +45,18 @@ final class ThemePaletteTest extends TestCase
     {
         $this->assertSame(ThemePalette::MerlinPetrol, ThemePalette::default());
     }
+
+    /** Jede Palette stellt alle benötigten, ausschließlich katalogbasierten CSS-Werte bereit. */
+    #[DataProvider('paletteProvider')]
+    public function test_palette_exposes_complete_css_variables(ThemePalette $palette): void
+    {
+        $this->assertSame(
+            ['accent', 'accent_hover', 'accent_soft', 'accent_soft_strong', 'accent_focus'],
+            array_keys($palette->cssVariables()),
+        );
+
+        foreach ($palette->cssVariables() as $value) {
+            $this->assertStringStartsWith('oklch(', $value);
+        }
+    }
 }
