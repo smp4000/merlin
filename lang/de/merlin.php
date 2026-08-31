@@ -30,11 +30,12 @@ return [
         'welcome' => 'Guten Tag, :name',
         'fallback_name' => 'Administrator',
         'introduction' => 'Wir bauen Ihre sichere Arbeitsumgebung Schritt für Schritt auf. Hier sehen Sie künftig die wichtigsten Aufgaben, Freigaben und Stationshinweise.',
+        'partner_introduction' => ':tenant ist eingerichtet. Gesellschaft und erste Tankstelle sind gespeichert; als Nächstes folgt die Verwaltung dieser Grunddaten und anschließend das Team.',
         'status' => 'System bereit',
         'progress' => [
             'eyebrow' => 'Einrichtung',
             'heading' => 'Ihr Weg zur einsatzbereiten Plattform',
-            'counter' => 'Schritt 1 von 4',
+            'counter' => 'Schritt :current von :total',
             'steps' => [
                 [
                     'title' => 'Partner anlegen',
@@ -75,6 +76,10 @@ return [
                     'description' => 'Einladungen, Rollen und Stationszuweisungen steuern.',
                     'state' => 'Geplant',
                 ],
+            ],
+            'states' => [
+                'ready' => 'Grunddaten erfasst',
+                'next' => 'Als Nächstes',
             ],
         ],
     ],

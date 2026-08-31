@@ -2,10 +2,15 @@
 
 namespace Tests\Feature\Filament;
 
+use App\Enums\TenantType;
 use App\Filament\AvatarProviders\InitialsAvatarProvider;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
+use App\Models\LegalEntity;
+use App\Models\Station;
 use App\Models\User;
+use App\Modules\Tenants\Application\CreateTenant;
+use App\Modules\Tenants\Application\Data\CreateTenantData;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -54,5 +59,70 @@ final class MerlinThemeTest extends TestCase
             ->assertSee('Ihr Weg zur einsatzbereiten Plattform')
             ->assertSee('Partnerverwaltung')
             ->assertDontSee('ui-avatars.com');
+    }
+
+    /**
+     * Bereits gespeicherte Gesellschaft und Tankstelle dürfen nicht erneut als offen erscheinen.
+     */
+    public function test_partner_dashboard_uses_the_real_tenant_setup_progress(): void
+    {
+        $user = User::factory()->create();
+        $tenant = app(CreateTenant::class)->handle(
+            $user,
+            new CreateTenantData('ATS', TenantType::SingleOperator),
+        );
+
+        $legalEntity = LegalEntity::query()->forceCreate([
+            'tenant_id' => $tenant->getKey(),
+            'legal_name' => 'ATS',
+            'legal_form' => 'sole_proprietorship',
+            'is_primary' => true,
+            'status' => 'active',
+            'street' => 'Teststraße',
+            'house_number' => '1',
+            'postal_code' => '36039',
+            'city' => 'Fulda',
+            'region' => 'Hessen',
+            'country_code' => 'DE',
+            'billing_email' => 'rechnung@example.test',
+        ]);
+        Station::query()->forceCreate([
+            'tenant_id' => $tenant->getKey(),
+            'legal_entity_id' => $legalEntity->getKey(),
+            'name' => 'ATS Fulda',
+            'status' => 'active',
+            'street' => 'Teststraße',
+            'house_number' => '1',
+            'postal_code' => '36039',
+            'city' => 'Fulda',
+            'region' => 'Hessen',
+            'country_code' => 'DE',
+            'timezone' => 'Europe/Berlin',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/admin/dashboard')
+            ->assertOk()
+            ->assertSee('ATS ist eingerichtet.')
+            ->assertSee('Schritt 3 von 4')
+            ->assertSee('Grunddaten erfasst');
+    }
+
+    /**
+     * Ohne bewusste Auswahl dürfen mehrere Memberships nicht zu einer zufälligen
+     * Mandantenanzeige zusammenfallen.
+     */
+    public function test_dashboard_does_not_guess_a_tenant_when_user_has_multiple_memberships(): void
+    {
+        $user = User::factory()->create();
+        app(CreateTenant::class)->handle($user, new CreateTenantData('Betrieb Nord', TenantType::SingleOperator));
+        app(CreateTenant::class)->handle($user, new CreateTenantData('Betrieb Süd', TenantType::SingleOperator));
+
+        $this->actingAs($user)
+            ->get('/admin/dashboard')
+            ->assertOk()
+            ->assertDontSee('Betrieb Nord ist eingerichtet.')
+            ->assertDontSee('Betrieb Süd ist eingerichtet.')
+            ->assertSee('Schritt 1 von 4');
     }
 }

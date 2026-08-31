@@ -56,6 +56,51 @@ final class StorePartnerOnboardingRequest extends FormRequest
     }
 
     /**
+     * Übersetzt technische Feldnamen für verständliche serverseitige Fehlermeldungen.
+     * Die Zuordnung enthält bewusst keine Werte und verhindert damit, dass Bankdaten in
+     * einer Validierungsübersicht oder einem Log erscheinen.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'legal_name' => 'Firma',
+            'legal_form' => 'Rechtsform',
+            'billing_street' => 'Straße der Rechnungsanschrift',
+            'billing_house_number' => 'Hausnummer der Rechnungsanschrift',
+            'billing_address_addition' => 'Adresszusatz der Rechnungsanschrift',
+            'billing_postal_code' => 'PLZ der Rechnungsanschrift',
+            'billing_city' => 'Ort der Rechnungsanschrift',
+            'billing_region' => 'Bundesland oder Region der Rechnungsanschrift',
+            'billing_country_code' => 'Land der Rechnungsanschrift',
+            'billing_email' => 'E-Mail für Rechnungen',
+            'vat_id' => 'USt-IdNr.',
+            'station_name' => 'Stationsname',
+            'fuel_station_brand_id' => 'Tankstellenmarke',
+            'station_street' => 'Straße der Tankstelle',
+            'station_house_number' => 'Hausnummer der Tankstelle',
+            'station_address_addition' => 'Adresszusatz der Tankstelle',
+            'station_postal_code' => 'PLZ der Tankstelle',
+            'station_city' => 'Ort der Tankstelle',
+            'station_region' => 'Bundesland oder Region der Tankstelle',
+            'station_country_code' => 'Land der Tankstelle',
+            'manager_salutation' => 'Anrede der Stationsleitung',
+            'manager_first_name' => 'Vorname der Stationsleitung',
+            'manager_last_name' => 'Nachname der Stationsleitung',
+            'manager_email' => 'E-Mail der Stationsleitung',
+            'manager_phone' => 'Telefon der Stationsleitung',
+            'manager_fax' => 'Fax der Stationsleitung',
+            'add_bank_account' => 'Auswahl zur Bankverbindung',
+            'account_holder' => 'Kontoinhaber',
+            'iban' => 'IBAN',
+            'bank_code' => 'Bankleitzahl',
+            'account_number' => 'Kontonummer',
+            'confirm_iban_result' => 'Prüfung der Bankverbindung',
+        ];
+    }
+
+    /**
      * Verlangt bei aktivierter Bankverbindung entweder eine IBAN oder das vollständige
      * Paar aus BLZ und Kontonummer, ohne Bankdaten für das Onboarding generell zu erzwingen.
      */

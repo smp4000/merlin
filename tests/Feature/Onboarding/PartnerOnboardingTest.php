@@ -76,6 +76,25 @@ final class PartnerOnboardingTest extends TestCase
         self::assertSame('active', $tenant->fresh()->status->value);
     }
 
+    public function test_conditional_bank_errors_are_rendered_with_understandable_german_labels(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $tenant = app(CreateTenant::class)->handle($user, new CreateTenantData('Test Partner', TenantType::SingleOperator));
+        $payload = $this->validPayload($this->brand()->getKey());
+        unset($payload['account_holder'], $payload['confirm_iban_result']);
+
+        $response = $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->from(route('onboarding.show'))
+            ->followingRedirects()
+            ->post(route('onboarding.store'), $payload);
+
+        $response->assertOk()
+            ->assertSee('Kontoinhaber ist erforderlich, wenn eine Bankverbindung hinterlegt wird.')
+            ->assertSee('Prüfung der Bankverbindung ist erforderlich, wenn eine Bankverbindung hinterlegt wird.')
+            ->assertDontSee('validation.required_if');
+    }
+
     public function test_request_cannot_move_records_to_another_tenant(): void
     {
         $user = User::factory()->create(['email_verified_at' => now()]);

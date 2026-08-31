@@ -229,11 +229,21 @@
     .merlin-onboarding-tabs button span { width: 1.5rem; height: 1.5rem; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: #e8efed; font-size: .7rem; }
     .merlin-onboarding-tabs button.is-active { color: var(--merlin-petrol-dark); background: white; box-shadow: 0 4px 16px rgb(18 35 38 / 9%); }
     .merlin-onboarding-tabs button.is-active span { color: white; background: var(--merlin-petrol); }
+    .merlin-onboarding-tabs button.is-complete:not(.is-active) { color: var(--merlin-petrol-dark); }
+    .merlin-onboarding-tabs button.is-complete:not(.is-active) span { color: white; background: var(--merlin-petrol); }
+    .merlin-onboarding-tabs button.is-error { color: #9f261d; background: #fff4f2; }
+    .merlin-onboarding-tabs button.is-error span { color: white; background: #c9362b; }
     .merlin-onboarding-panel { display: none; min-height: 390px; padding: clamp(1.5rem, 5vw, 3.5rem); }
     .merlin-onboarding-panel.is-active { display: block; }
     .merlin-onboarding-panel label { display: grid; gap: .42rem; color: var(--merlin-ink); font-size: .86rem; font-weight: 720; }
     .merlin-onboarding-panel input:not([type='checkbox']), .merlin-onboarding-panel select { width: 100%; min-height: 3.15rem; padding: .7rem .85rem; border: 1px solid #cbdad8; border-radius: .75rem; background: white; }
     .merlin-onboarding-panel input:focus, .merlin-onboarding-panel select:focus { border-color: var(--merlin-petrol); outline: 3px solid rgb(8 127 120 / 13%); }
+    .merlin-onboarding-panel input.is-invalid, .merlin-onboarding-panel select.is-invalid { border-color: #c9362b; background: #fffafa; }
+    .merlin-onboarding-panel input.is-invalid:focus, .merlin-onboarding-panel select.is-invalid:focus { outline-color: rgb(201 54 43 / 18%); }
+    .merlin-live-field-error { color: #a52a21; font-size: .78rem; font-weight: 680; line-height: 1.45; }
+    .merlin-checkbox .merlin-live-field-error { grid-column: 2; }
+    .merlin-live-field-error[hidden], .merlin-error-summary[hidden] { display: none; }
+    .merlin-error-summary p { margin-top: .35rem; }
     .merlin-panel-heading { position: relative; margin-bottom: 1.6rem; }
     .merlin-panel-heading > span { color: var(--merlin-petrol); font-size: .73rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
     .merlin-panel-heading h2 { margin-top: .35rem; font-size: 2rem; letter-spacing: -.035em; font-weight: 800; }

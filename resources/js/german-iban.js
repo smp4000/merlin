@@ -38,6 +38,24 @@ export function formatIban(iban) {
     return iban.replace(/(.{4})/g, '$1 ').trim();
 }
 
+/**
+ * Normalisiert und prüft eine vorhandene deutsche IBAN für die unmittelbare Formularhilfe.
+ *
+ * @param {string} iban Vom Benutzer eingegebene, gegebenenfalls gruppierte IBAN.
+ * @returns {string} Normalisierte deutsche IBAN ohne Leerzeichen.
+ * @throws {TypeError} Wenn Format oder Modulo-97-Prüfziffer ungültig sind.
+ */
+export function normalizeAndValidateGermanIban(iban) {
+    const normalized = iban.toUpperCase().replace(/\s+/g, '');
+
+    if (!/^DE\d{20}$/.test(normalized)
+        || mod97(`${normalized.slice(4)}1314${normalized.slice(2, 4)}`) !== 1) {
+        throw new TypeError('invalid_iban');
+    }
+
+    return normalized;
+}
+
 /** Berechnet den Rest großer Dezimalzahlen ziffernweise ohne JavaScript-Zahlüberlauf. */
 function mod97(number) {
     let remainder = 0;

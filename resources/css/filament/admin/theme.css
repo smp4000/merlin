@@ -362,6 +362,17 @@
     background: rgb(204 251 241 / 0.36);
 }
 
+.merlin-step.is-complete {
+    border-color: rgb(15 118 110 / 0.2);
+    background: rgb(240 253 250 / 0.72);
+}
+
+.merlin-step.is-complete .merlin-step__number {
+    color: white;
+    background: var(--merlin-petrol);
+    box-shadow: none;
+}
+
 .merlin-step__number {
     display: grid;
     width: 1.8rem;
