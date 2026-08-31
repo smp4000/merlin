@@ -30,6 +30,19 @@ return [
         'review_heading' => 'Angaben abschließend prüfen',
         'review_description' => 'Kontrollieren Sie die Zusammenfassung. Die Tankstelle wird zunächst als Entwurf gespeichert.',
     ],
+    'edit' => [
+        'title' => 'Tankstelle bearbeiten',
+        'eyebrow' => 'Ausgewählte Tankstelle',
+        'form_eyebrow' => 'Stationsstammdaten',
+        'heading' => 'Grunddaten bearbeiten',
+        'description' => 'Ändern Sie die freigegebenen Grunddaten Schritt für Schritt. Status und Verzeichnisverknüpfung bleiben unverändert.',
+        'general_description' => 'Prüfen Sie Betreiber, Marke und die sichtbaren Stationsnamen.',
+        'address_description' => 'Ändern Sie die Anschrift nur, wenn sie tatsächlich zum Standort gehört. Vorhandene Koordinaten werden danach erneut geprüft.',
+        'review_heading' => 'Änderungen abschließend prüfen',
+        'review_description' => 'Kontrollieren Sie die Grunddaten vor dem Speichern. Parallel geänderte Datensätze werden nicht überschrieben.',
+        'status_unchanged' => 'Der Status wird in diesem Formular nicht geändert.',
+        'source_unchanged' => 'Quelle und Verzeichnisverknüpfung bleiben erhalten.',
+    ],
     'link' => [
         'title' => 'Mit Tankstellenverzeichnis verknüpfen',
         'eyebrow' => 'Freiwillige Verknüpfung',
@@ -61,6 +74,8 @@ return [
         'link_short' => 'Verknüpfen',
         'confirm_link' => 'Verknüpfung bestätigen',
         'save_draft' => 'Entwurf speichern',
+        'edit' => 'Bearbeiten',
+        'save_changes' => 'Änderungen speichern',
         'change_selection' => 'Auswahl ändern',
         'previous' => 'Zurück',
         'next' => 'Weiter',
@@ -109,6 +124,7 @@ return [
     'duplicate' => [
         'heading' => 'Mögliche doppelte Tankstelle erkannt',
         'description' => 'Unter dieser Anschrift existiert bereits eine Station. Prüfen Sie den Datensatz und begründen Sie eine bewusste zusätzliche Anlage.',
+        'edit_description' => 'Eine andere Tankstelle dieses Betriebs verwendet bereits diese Anschrift. Prüfen Sie die Änderung und begründen Sie eine bewusste Doppelbelegung.',
     ],
     'validation' => [
         'legal_entity_invalid' => 'Der gewählte Betreiber gehört nicht zu Ihrem aktiven Betrieb.',
@@ -118,11 +134,13 @@ return [
         'reference_expired' => 'Der Suchtreffer ist abgelaufen. Bitte starten Sie die Suche erneut.',
         'station_invalid' => 'Die ausgewählte Tankstelle ist in diesem Betrieb nicht verfügbar.',
         'duplicate_reason_required' => 'Bitte begründen Sie, warum an dieser Anschrift eine weitere Tankstelle angelegt werden soll.',
+        'edit_conflict' => 'Diese Tankstelle wurde zwischenzeitlich geändert. Öffnen Sie die Bearbeitung neu, damit keine neueren Angaben überschrieben werden.',
         'postal_code' => 'Bitte geben Sie eine gültige fünfstellige Postleitzahl ein.',
         'radius' => 'Bitte wählen Sie einen angebotenen Suchradius.',
     ],
     'notifications' => [
         'created' => 'Stationsentwurf wurde gespeichert.',
+        'updated' => 'Die Stationsgrunddaten wurden gespeichert.',
         'linked' => 'Die Tankstelle wurde mit dem Verzeichnis verknüpft.',
     ],
 ];

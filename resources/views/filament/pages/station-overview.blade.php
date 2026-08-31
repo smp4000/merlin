@@ -51,13 +51,18 @@
                     </dl>
 
                     <div class="merlin-station-card__actions">
-                        @if ($station->sourceReferences->isEmpty())
-                            <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
-                                {{ __('stations.actions.link_directory') }}
+                        <div class="merlin-station-actions">
+                            <a class="merlin-primary-button" href="{{ \App\Filament\Pages\StationEdit::getUrl(['station' => $station->public_id]) }}" wire:navigate>
+                                {{ __('stations.actions.edit') }}
                             </a>
-                        @else
-                            <span class="merlin-linked-note">{{ __('stations.values.directory_linked') }}</span>
-                        @endif
+                            @if ($station->sourceReferences->isEmpty())
+                                <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
+                                    {{ __('stations.actions.link_directory') }}
+                                </a>
+                            @else
+                                <span class="merlin-linked-note">{{ __('stations.values.directory_linked') }}</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </article>
@@ -95,13 +100,18 @@
                                     </span>
                                 </td>
                                 <td class="merlin-station-table__action">
-                                    @if ($station->sourceReferences->isEmpty())
-                                        <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
-                                            {{ __('stations.actions.link_short') }}
+                                    <div class="merlin-station-actions">
+                                        <a class="merlin-primary-button" href="{{ \App\Filament\Pages\StationEdit::getUrl(['station' => $station->public_id]) }}" wire:navigate>
+                                            {{ __('stations.actions.edit') }}
                                         </a>
-                                    @else
-                                        <span class="merlin-linked-note">{{ __('stations.values.directory_linked_short') }}</span>
-                                    @endif
+                                        @if ($station->sourceReferences->isEmpty())
+                                            <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
+                                                {{ __('stations.actions.link_short') }}
+                                            </a>
+                                        @else
+                                            <span class="merlin-linked-note">{{ __('stations.values.directory_linked_short') }}</span>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

@@ -13,11 +13,15 @@ use App\Models\Station;
 use App\Models\User;
 use App\Modules\Stations\Application\CreateStation;
 use App\Modules\Stations\Application\Data\CreateStationData;
+use App\Modules\Stations\Application\Data\UpdateStationData;
 use App\Modules\Stations\Application\Exceptions\PotentialStationDuplicateException;
 use App\Modules\Stations\Application\LinkStationSourceReference;
+use App\Modules\Stations\Application\UpdateStation;
 use App\Modules\Stations\Domain\StationDetails;
 use App\Modules\Tenants\Application\CreateTenant;
 use App\Modules\Tenants\Application\Data\CreateTenantData;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -169,6 +173,146 @@ final class StationManagementTest extends TestCase
         self::assertFalse((bool) AuditEvent::query()->where('correlation_id', 'link')->sole()->metadata['master_data_changed']);
     }
 
+    public function test_owner_updates_ground_data_without_changing_status_source_or_directory_link(): void
+    {
+        [$context, $user, $entity, $brand] = $this->context();
+        $station = app(CreateStation::class)->handle(
+            $context,
+            $this->data($entity, $brand, externalId: 'edit-provider-id'),
+            $user,
+            'create-before-edit',
+        );
+        $station->forceFill([
+            'status' => 'active',
+            'latitude' => 50.56,
+            'longitude' => 9.71,
+            'source_verified_at' => now(),
+        ])->save();
+        $station->refresh();
+
+        $updated = app(UpdateStation::class)->handle(
+            $context,
+            (string) $station->public_id,
+            $this->updateData($station, $entity, $brand, name: 'Aral Fulda Neu', street: 'Neue Straße'),
+            $user,
+            'station-update-test',
+        );
+
+        self::assertSame('Aral Fulda Neu', $updated->name);
+        self::assertSame('Neue Straße', $updated->street);
+        self::assertSame('active', $updated->status);
+        self::assertSame('external_search', $updated->source_type);
+        self::assertNull($updated->latitude);
+        self::assertNull($updated->longitude);
+        self::assertNull($updated->source_verified_at);
+        $this->assertDatabaseHas('station_source_references', ['station_id' => $station->getKey()]);
+
+        $event = AuditEvent::query()->where('correlation_id', 'station-update-test')->sole();
+        self::assertSame('station.updated', $event->event_type);
+        self::assertStringContainsString('name', $event->metadata['changed_fields']);
+        self::assertStringNotContainsString('Aral Fulda Neu', json_encode($event->metadata, JSON_THROW_ON_ERROR));
+    }
+
+    public function test_update_rejects_foreign_station_and_stale_form_version(): void
+    {
+        [$context, $user, $entity, $brand] = $this->context();
+        [$foreignContext, $foreignUser, $foreignEntity, $foreignBrand] = $this->context();
+        $foreignStation = app(CreateStation::class)->handle(
+            $foreignContext,
+            $this->data($foreignEntity, $foreignBrand),
+            $foreignUser,
+            'foreign-station',
+        );
+
+        try {
+            app(UpdateStation::class)->handle(
+                $context,
+                (string) $foreignStation->public_id,
+                $this->updateData($foreignStation, $entity, $brand),
+                $user,
+                'foreign-update',
+            );
+            self::fail('Eine fremde Station darf nicht aufgelöst werden.');
+        } catch (ModelNotFoundException) {
+            self::assertSame('Aral Petersberg', $foreignStation->fresh()->name);
+        }
+
+        $station = app(CreateStation::class)->handle($context, $this->data($entity, $brand), $user, 'own-station');
+        $stale = $this->updateData($station, $entity, $brand, expectedVersion: '2000-01-01 00:00:00.000000');
+
+        $this->expectException(ValidationException::class);
+        app(UpdateStation::class)->handle($context, (string) $station->public_id, $stale, $user, 'stale-update');
+    }
+
+    public function test_update_to_existing_address_requires_documented_reason(): void
+    {
+        [$context, $user, $entity, $brand] = $this->context();
+        $first = app(CreateStation::class)->handle($context, $this->data($entity, $brand, name: 'Erste'), $user, 'first-edit');
+        $second = app(CreateStation::class)->handle(
+            $context,
+            new CreateStationData(
+                (string) $entity->public_id,
+                $brand->getKey(),
+                'Zweite',
+                null,
+                'Andere Straße',
+                '9',
+                null,
+                '36100',
+                'Petersberg',
+                'Hessen',
+                'DE',
+                'Europe/Berlin',
+                'de',
+                'manual',
+            ),
+            $user,
+            'second-edit',
+        );
+
+        $this->expectException(PotentialStationDuplicateException::class);
+        app(UpdateStation::class)->handle(
+            $context,
+            (string) $second->public_id,
+            $this->updateData($second, $entity, $brand, street: $first->street),
+            $user,
+            'duplicate-edit',
+        );
+    }
+
+    public function test_read_only_tenant_and_foreign_actor_cannot_update_station(): void
+    {
+        [$context, $user, $entity, $brand] = $this->context();
+        $station = app(CreateStation::class)->handle($context, $this->data($entity, $brand), $user, 'before-guard');
+        $foreignActor = User::factory()->create();
+
+        try {
+            app(UpdateStation::class)->handle(
+                $context,
+                (string) $station->public_id,
+                $this->updateData($station, $entity, $brand),
+                $foreignActor,
+                'wrong-actor',
+            );
+            self::fail('Ein fremder Akteur darf die Membership des Kontexts nicht verwenden.');
+        } catch (AuthorizationException) {
+            self::assertSame('Aral Petersberg', $station->fresh()->name);
+        }
+
+        $context->tenant->status = TenantStatus::ReadOnly;
+        $context->tenant->save();
+        $readOnlyContext = new TenantContext($context->tenant->fresh()->load('trial'), $context->membership);
+
+        $this->expectException(TenantReadOnlyException::class);
+        app(UpdateStation::class)->handle(
+            $readOnlyContext,
+            (string) $station->public_id,
+            $this->updateData($station, $entity, $brand, name: 'Verbotene Änderung'),
+            $user,
+            'read-only-update',
+        );
+    }
+
     /** @return array{TenantContext, User, LegalEntity, FuelStationBrand} */
     private function context(): array
     {
@@ -214,6 +358,33 @@ final class StationManagementTest extends TestCase
             $externalId,
             $externalId === null ? null : hash('sha256', $externalId),
             duplicateReason: $duplicateReason,
+        );
+    }
+
+    private function updateData(
+        Station $station,
+        LegalEntity $entity,
+        FuelStationBrand $brand,
+        string $name = 'Aral Petersberg',
+        string $street = 'Petersberger Straße',
+        ?string $expectedVersion = null,
+    ): UpdateStationData {
+        return new UpdateStationData(
+            (string) $entity->public_id,
+            $brand->getKey(),
+            $name,
+            null,
+            $street,
+            '101',
+            null,
+            '36100',
+            'Petersberg',
+            'Hessen',
+            'DE',
+            'Europe/Berlin',
+            'de',
+            $expectedVersion ?? $station->updated_at->format('Y-m-d H:i:s.u'),
+            null,
         );
     }
 }

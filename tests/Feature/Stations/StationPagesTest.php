@@ -4,6 +4,7 @@ namespace Tests\Feature\Stations;
 
 use App\Enums\TenantType;
 use App\Filament\Pages\StationCreate;
+use App\Filament\Pages\StationEdit;
 use App\Filament\Pages\StationOverview;
 use App\Foundation\Tenancy\TenantContext;
 use App\Models\LegalEntity;
@@ -37,6 +38,7 @@ final class StationPagesTest extends TestCase
             ->assertSeeText($own->name)
             ->assertDontSeeText('Fremde Shell')
             ->assertSeeText('Tankstelle anlegen')
+            ->assertSeeText('Bearbeiten')
             ->assertSeeText('Mit Tankstellenverzeichnis verknüpfen');
     }
 
@@ -86,6 +88,46 @@ final class StationPagesTest extends TestCase
     {
         $this->get('/admin/stationen')->assertRedirect('/admin/login');
         $this->get('/admin/stationen/anlegen')->assertRedirect('/admin/login');
+        $this->get('/admin/stationen/unknown/bearbeiten')->assertRedirect('/admin/login');
+    }
+
+    public function test_edit_page_is_tenant_scoped_and_saves_through_wizard(): void
+    {
+        [$user, $tenant, $entity] = $this->partner('Bearbeitungsbetrieb');
+        $station = $this->station($tenant, $entity, 'Alte Stationsbezeichnung');
+        [, $foreignTenant, $foreignEntity] = $this->partner('Fremder Bearbeitungsbetrieb');
+        $foreign = $this->station($foreignTenant, $foreignEntity, 'Fremde Station');
+
+        $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->get('/admin/stationen/'.$station->public_id.'/bearbeiten')
+            ->assertOk()
+            ->assertSeeText('Grunddaten bearbeiten')
+            ->assertSeeText('Alte Stationsbezeichnung');
+
+        $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->get('/admin/stationen/'.$foreign->public_id.'/bearbeiten')
+            ->assertNotFound();
+
+        $tenant->load('trial', 'memberships');
+        app()->instance(TenantContext::class, new TenantContext($tenant, $tenant->memberships->firstOrFail()));
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+        $this->actingAs($user);
+
+        Livewire::test(StationEdit::class, ['station' => (string) $station->public_id])
+            ->assertSet('wizardStep', 1)
+            ->set('name', 'Neue Stationsbezeichnung')
+            ->call('nextWizardStep')
+            ->assertSet('wizardStep', 2)
+            ->set('region', 'Hessen')
+            ->call('nextWizardStep')
+            ->assertSet('wizardStep', 3)
+            ->call('save')
+            ->assertHasNoErrors()
+            ->assertRedirect(StationOverview::getUrl());
+
+        self::assertSame('Neue Stationsbezeichnung', $station->fresh()->name);
     }
 
     public function test_livewire_manual_flow_creates_station_through_application_service(): void

@@ -298,6 +298,13 @@ Stationen wechselt dieselbe tenantgebundene Datenmenge automatisch in eine kompa
 horizontal zugängliche Tabelle. Der während des Onboardings angelegte Standort ist sofort
 sichtbar. Tenantweite Suche, Filter und Stapelaktionen bleiben durch Policies geschützt.
 
+Jede Karte und Tabellenzeile bietet `Bearbeiten`. Der erste Bearbeitungsschnitt umfasst
+Betreiber, Marke, Namen und strukturierte Anschrift im dreistufigen Wizard. Status,
+Herkunft und Verzeichnisreferenzen sind dort unveränderlich. Änderungen werden mit
+optimistischer Versionsprüfung gespeichert; bei parallelen Änderungen muss die Seite neu
+geöffnet werden. Eine geänderte Anschrift verwirft veraltete Koordinaten und hebt die
+bisherige Quellenbestätigung auf, ohne die Verzeichnisreferenz zu löschen.
+
 ### Suchtrefferliste
 
 Jeder Treffer zeigt Tankstellenname, erkannte Marke, vollständige Anschrift, Entfernung

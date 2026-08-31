@@ -775,6 +775,20 @@
     margin-top: 1rem;
 }
 
+.merlin-station-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.merlin-station-table .merlin-primary-button,
+.merlin-station-table .merlin-secondary-button {
+    min-height: 2.25rem;
+    padding: 0.48rem 0.7rem;
+    font-size: 0.76rem;
+}
+
 .merlin-empty-state {
     padding: 3rem 1.5rem;
     text-align: center;
