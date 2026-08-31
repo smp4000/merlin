@@ -10,6 +10,7 @@ use App\Foundation\Tenancy\AccessibleTenantMemberships;
 use App\Foundation\Tenancy\TenantContext;
 use App\Http\Middleware\EnsureActiveTenantContext;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -45,6 +46,13 @@ final class PartnerPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
+            ->userMenuItems([
+                // Die Abmeldung darf insbesondere nicht am abgelaufenen TenantContext
+                // scheitern, der alle übrigen Partnerseiten weiterhin strikt schützt.
+                'logout' => fn (Action $action): Action => $action
+                    ->url(route('session.logout.partner'))
+                    ->postToUrl(),
+            ])
             ->brandName(__('merlin.brand.name'))
             ->brandLogo(fn () => view('filament.components.brand'))
             ->darkModeBrandLogo(fn () => view('filament.components.brand'))

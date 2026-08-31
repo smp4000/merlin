@@ -18,10 +18,17 @@ abstract class TestCase extends BaseTestCase
      */
     public function createApplication(): Application
     {
-        $cachedConfig = dirname(__DIR__).'/bootstrap/cache/config.php';
+        $cacheDirectory = dirname(__DIR__).'/bootstrap/cache';
+        $cachedRoutes = glob($cacheDirectory.'/routes-*.php') ?: [];
+        $cachedFiles = [
+            $cacheDirectory.'/config.php',
+            ...$cachedRoutes,
+        ];
 
-        if (is_file($cachedConfig) && ! unlink($cachedConfig)) {
-            throw new RuntimeException('Der Konfigurationscache konnte vor dem sicheren Teststart nicht entfernt werden.');
+        foreach ($cachedFiles as $cachedFile) {
+            if (is_file($cachedFile) && ! unlink($cachedFile)) {
+                throw new RuntimeException('Ein Laravel-Cache konnte vor dem sicheren Teststart nicht entfernt werden.');
+            }
         }
 
         return parent::createApplication();

@@ -8,6 +8,7 @@ use App\Filament\Pages\Auth\Login;
 use App\Filament\Platform\Pages\Dashboard;
 use App\Filament\Resources\BankDirectorySources\BankDirectorySourceResource;
 use App\Filament\Resources\Partners\PartnerResource;
+use Filament\Actions\Action;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -40,6 +41,13 @@ final class PlatformPanelProvider extends PanelProvider
             ->id('platform')
             ->path('platform')
             ->login(Login::class)
+            ->userMenuItems([
+                // Die zentrale Route bleibt auch bei einem ungültig gewordenen
+                // AuthenticateSession-Zustand erreichbar und invalidiert alles serverseitig.
+                'logout' => fn (Action $action): Action => $action
+                    ->url(route('session.logout.platform'))
+                    ->postToUrl(),
+            ])
             ->brandName(__('merlin.brand.name'))
             ->brandLogo(fn () => view('filament.components.brand'))
             ->darkModeBrandLogo(fn () => view('filament.components.brand'))

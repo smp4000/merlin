@@ -4,6 +4,7 @@ use App\Http\Controllers\LegalDocumentController;
 use App\Http\Controllers\PartnerOnboardingController;
 use App\Http\Controllers\PartnerRegistrationConfirmationController;
 use App\Http\Controllers\PartnerRegistrationController;
+use App\Http\Controllers\SessionLogoutController;
 use App\Http\Controllers\TenantSelectionController;
 use App\Http\Middleware\EnsureActiveTenantContext;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Die Abmeldung darf nicht von einem weiterhin gültigen Auth-, Panel- oder TenantContext
+// abhängen. POST und die globale Web-Middleware erhalten dennoch den CSRF-Schutz.
+Route::post('/platform/abmelden', [SessionLogoutController::class, 'platform'])
+    ->name('session.logout.platform');
+Route::post('/admin/abmelden', [SessionLogoutController::class, 'partner'])
+    ->name('session.logout.partner');
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/betrieb-auswaehlen', [TenantSelectionController::class, 'show'])
