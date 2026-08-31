@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LegalEntityIdentifierType;
+use App\Enums\LegalEntityStatus;
 use App\Enums\TenantStatus;
 use App\Foundation\Audit\AuditRecorder;
 use App\Foundation\Tenancy\TenantContext;
@@ -9,15 +11,19 @@ use App\Http\Requests\StorePartnerOnboardingRequest;
 use App\Models\BankDirectoryEntry;
 use App\Models\BankDirectoryVersion;
 use App\Models\FuelStationBrand;
-use App\Models\LegalEntity;
 use App\Models\LegalEntityBankAccount;
+use App\Models\LegalForm;
 use App\Models\Station;
 use App\Models\StationContact;
 use App\Models\Tenant;
 use App\Modules\Banking\Application\GermanIban;
+use App\Modules\Partners\Application\CreateLegalEntity;
+use App\Modules\Partners\Application\Data\CreateLegalEntityData;
+use App\Modules\Partners\Application\StoreLegalEntityIdentifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use InvalidArgumentException;
 
@@ -42,7 +48,13 @@ final class PartnerOnboardingController extends Controller
             ->get()
             ->filter(fn (FuelStationBrand $brand): bool => in_array($context->tenant->country_code, $brand->country_codes, true));
 
-        return view('onboarding.show', compact('context', 'brands'));
+        $legalForms = LegalForm::query()
+            ->where('status', 'active')
+            ->get()
+            ->filter(fn (LegalForm $legalForm): bool => $legalForm->isSelectableFor($context->tenant->country_code))
+            ->sortBy(fn (LegalForm $legalForm): string => $legalForm->label($context->tenant->default_locale));
+
+        return view('onboarding.show', compact('context', 'brands', 'legalForms'));
     }
 
     /**
@@ -53,6 +65,8 @@ final class PartnerOnboardingController extends Controller
         TenantContext $context,
         GermanIban $ibanService,
         AuditRecorder $auditRecorder,
+        CreateLegalEntity $createLegalEntity,
+        StoreLegalEntityIdentifier $storeIdentifier,
     ): RedirectResponse {
         abort_unless($context->tenant->status === TenantStatus::Onboarding, 403);
         $data = $request->validated();
@@ -61,7 +75,9 @@ final class PartnerOnboardingController extends Controller
             $brand = FuelStationBrand::query()->whereKey($data['fuel_station_brand_id'])->where('status', 'active')->first();
 
             if ($brand === null || ! in_array($context->tenant->country_code, $brand->country_codes, true)) {
-                return back()->withErrors(['fuel_station_brand_id' => 'Die gewählte Marke ist für dieses Land nicht verfügbar.'])->withInput();
+                return back()
+                    ->withErrors(['fuel_station_brand_id' => 'Die gewählte Marke ist für dieses Land nicht verfügbar.'])
+                    ->withInput($request->except(['vat_id', 'iban', 'account_number']));
             }
         }
 
@@ -72,10 +88,12 @@ final class PartnerOnboardingController extends Controller
                     : $ibanService->calculate($data['bank_code'], $data['account_number']))
                 : null;
         } catch (InvalidArgumentException $exception) {
-            return back()->withErrors(['iban' => $exception->getMessage()])->withInput();
+            return back()
+                ->withErrors(['iban' => $exception->getMessage()])
+                ->withInput($request->except(['vat_id', 'iban', 'account_number']));
         }
 
-        DB::transaction(function () use ($context, $data, $iban, $ibanService, $auditRecorder, $request): void {
+        DB::transaction(function () use ($context, $data, $iban, $ibanService, $auditRecorder, $request, $createLegalEntity, $storeIdentifier): void {
             $tenantId = $context->id();
             $tenant = Tenant::query()->whereKey($tenantId)->lockForUpdate()->firstOrFail();
 
@@ -83,25 +101,39 @@ final class PartnerOnboardingController extends Controller
             // Doppelklick. Nur der erste Request darf den Onboardingzustand verbrauchen.
             abort_unless($tenant->status === TenantStatus::Onboarding, 409);
 
-            // `forceCreate` ist hier bewusst lokal: `tenant_id` stammt ausschließlich aus
-            // dem geprüften TenantContext und bleibt für allgemeines Mass Assignment gesperrt.
-            $legalEntity = LegalEntity::query()->forceCreate([
-                'tenant_id' => $tenantId,
-                'legal_name' => trim($data['legal_name']),
-                'legal_form' => $data['legal_form'],
-                'is_primary' => true,
-                'status' => 'active',
-                'street' => trim($data['billing_street']),
-                'house_number' => trim($data['billing_house_number']),
-                'address_addition' => $data['billing_address_addition'] ?? null,
-                'postal_code' => trim($data['billing_postal_code']),
-                'city' => trim($data['billing_city']),
-                'region' => trim($data['billing_region']),
-                'country_code' => $data['billing_country_code'],
-                'billing_email' => mb_strtolower(trim($data['billing_email'])),
-                'vat_id' => filled($data['vat_id'] ?? null) ? mb_strtoupper(str_replace(' ', '', $data['vat_id'])) : null,
-                'vat_id_masked' => $this->maskIdentifier($data['vat_id'] ?? null),
-            ]);
+            $legalForm = LegalForm::query()->where('key', $data['legal_form'])->first();
+
+            if ($legalForm === null) {
+                throw ValidationException::withMessages([
+                    'legal_form' => 'Die gewählte Rechtsform ist nicht verfügbar.',
+                ]);
+            }
+
+            $legalEntity = $createLegalEntity->handle($context, new CreateLegalEntityData(
+                legalFormId: (int) $legalForm->getKey(),
+                legalName: $data['legal_name'],
+                tradeName: null,
+                status: LegalEntityStatus::Active,
+                makePrimary: true,
+                street: $data['billing_street'],
+                houseNumber: $data['billing_house_number'],
+                addressAddition: $data['billing_address_addition'] ?? null,
+                postalCode: $data['billing_postal_code'],
+                city: $data['billing_city'],
+                region: $data['billing_region'],
+                countryCode: $data['billing_country_code'],
+                businessEmail: $data['billing_email'],
+            ));
+
+            if (filled($data['vat_id'] ?? null)) {
+                $storeIdentifier->handle(
+                    $context,
+                    $legalEntity->public_id,
+                    LegalEntityIdentifierType::VatId,
+                    $data['billing_country_code'],
+                    $data['vat_id'],
+                );
+            }
 
             $station = Station::query()->forceCreate([
                 'tenant_id' => $tenantId,
@@ -158,6 +190,7 @@ final class PartnerOnboardingController extends Controller
             }
 
             $tenant->status = TenantStatus::Active;
+            $tenant->onboarding_completed_at = now();
             $tenant->save();
 
             $auditRecorder->record(
@@ -172,12 +205,5 @@ final class PartnerOnboardingController extends Controller
         });
 
         return redirect('/admin/dashboard')->with('status', 'Onboarding erfolgreich abgeschlossen.');
-    }
-
-    private function maskIdentifier(?string $value): ?string
-    {
-        $normalized = mb_strtoupper(str_replace(' ', '', (string) $value));
-
-        return $normalized === '' ? null : str_repeat('•', max(0, strlen($normalized) - 4)).substr($normalized, -4);
     }
 }

@@ -47,8 +47,8 @@
                 <div class="merlin-field-grid">
                     <label>Firma / vollständige Firmierung<input name="legal_name" value="{{ old('legal_name', $context->tenant->display_name) }}" required maxlength="200"></label>
                     <label>Rechtsform<select name="legal_form" required>
-                        @foreach (['sole_proprietorship' => 'Einzelunternehmen', 'gbr' => 'GbR', 'ug' => 'UG (haftungsbeschränkt)', 'gmbh' => 'GmbH', 'ag' => 'AG', 'kg' => 'KG', 'gmbh_co_kg' => 'GmbH & Co. KG', 'other' => 'Sonstige'] as $value => $label)
-                            <option value="{{ $value }}" @selected(old('legal_form', 'sole_proprietorship') === $value)>{{ $label }}</option>
+                        @foreach ($legalForms as $legalForm)
+                            <option value="{{ $legalForm->key }}" @selected(old('legal_form', $legalForms->first()?->key) === $legalForm->key)>{{ $legalForm->label($context->tenant->default_locale) }}</option>
                         @endforeach
                     </select></label>
                     <label>E-Mail für Rechnungen<input type="email" name="billing_email" value="{{ old('billing_email', auth()->user()->email) }}" required maxlength="254"></label>

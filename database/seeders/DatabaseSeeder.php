@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LocalAdminSeeder::class,
+            LegalFormSeeder::class,
             FuelStationBrandSeeder::class,
             BankDirectorySourceSeeder::class,
         ]);

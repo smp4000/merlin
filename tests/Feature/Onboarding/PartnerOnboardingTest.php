@@ -95,6 +95,25 @@ final class PartnerOnboardingTest extends TestCase
             ->assertDontSee('validation.required_if');
     }
 
+    public function test_sensitive_tax_and_bank_values_are_not_flashed_after_validation_error(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $tenant = app(CreateTenant::class)->handle($user, new CreateTenantData('Test Partner', TenantType::SingleOperator));
+        $payload = $this->validPayload($this->brand()->getKey());
+        unset($payload['account_holder']);
+
+        $this->actingAs($user)
+            ->withSession(['active_tenant_public_id' => $tenant->public_id])
+            ->from(route('onboarding.show'))
+            ->post(route('onboarding.store'), $payload)
+            ->assertRedirect(route('onboarding.show'))
+            ->assertSessionHasErrors('account_holder');
+
+        self::assertNull(session()->getOldInput('vat_id'));
+        self::assertNull(session()->getOldInput('account_number'));
+        self::assertNull(session()->getOldInput('iban'));
+    }
+
     public function test_request_cannot_move_records_to_another_tenant(): void
     {
         $user = User::factory()->create(['email_verified_at' => now()]);
@@ -155,7 +174,7 @@ final class PartnerOnboardingTest extends TestCase
     private function validPayload(int $brandId): array
     {
         return [
-            'legal_name' => 'Welle Tankstellen', 'legal_form' => 'sole_proprietorship',
+            'legal_name' => 'Welle Tankstellen', 'legal_form' => 'de_sole_proprietorship',
             'billing_street' => 'Petersberger Straße', 'billing_house_number' => '101',
             'billing_postal_code' => '36100', 'billing_city' => 'Petersberg',
             'billing_region' => 'Hessen', 'billing_country_code' => 'DE',

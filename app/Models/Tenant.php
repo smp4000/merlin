@@ -62,6 +62,22 @@ final class Tenant extends Model
     }
 
     /**
+     * Liefert den datensparsam gehaltenen primären Geschäftskontakt des Mandanten.
+     */
+    public function businessContact(): HasOne
+    {
+        return $this->hasOne(TenantBusinessContact::class);
+    }
+
+    /**
+     * Liefert alle rechtlichen Gesellschaften innerhalb dieses Mandanten.
+     */
+    public function legalEntities(): HasMany
+    {
+        return $this->hasMany(LegalEntity::class);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array
@@ -69,6 +85,7 @@ final class Tenant extends Model
         return [
             'type' => TenantType::class,
             'status' => TenantStatus::class,
+            'onboarding_completed_at' => 'datetime',
         ];
     }
 }

@@ -597,7 +597,7 @@ Umsetzungsnachweis:
 - Cross-Panel-, Cross-Tenant-, Fremd-ULID-, Mehrfachmembership- und Ablaufprüfungen sind
   automatisiert abgedeckt.
 
-### Paket B: belastbares Partner- und Gesellschaftsmodell
+### Paket B: belastbares Partner- und Gesellschaftsmodell – umgesetzt am 31.08.2026
 
 Neue beziehungsweise erweiterte fachliche Strukturen:
 
@@ -650,6 +650,31 @@ Abnahme Paket B:
 - deaktivierte Rechtsformen bleiben an Bestandsdaten sichtbar, sind aber nicht neu
   auswählbar;
 - vollständige Kennungen erscheinen in keinem Log-, Audit- oder Fehlertexttest.
+
+Umsetzungsnachweis:
+
+- ein zentraler, idempotenter DACH-Rechtsformkatalog enthält stabile Schlüssel,
+  lokalisierte Bezeichnungen, Länder, Status und zeitliche Gültigkeit;
+- Gesellschaften besitzen öffentliche ULIDs, Katalogreferenz, Handelsname,
+  Wirksamkeitsdatum, strukturierte Geschäfts- und optionale Postanschrift sowie einen
+  datenbankgestützten eindeutigen Hauptgesellschafts-Guard;
+- der primäre Geschäftskontakt ist tenantgebunden und hält Personenfelder bewusst
+  optional;
+- USt-ID, nationale Steuernummer, Wirtschafts-ID, Handelsregister- und Arbeitgeberkennung
+  werden typisiert, verschlüsselt, maskiert und über einen tenantgebundenen HMAC-
+  Fingerprint auf Dubletten geprüft;
+- Anlage, Hauptgesellschaftswechsel, Statuswechsel und Kennungsspeicherung erfolgen nur
+  über TenantContext- und Nur-Lesen-geschützte Anwendungsdienste;
+- die Vorwärtsmigration normalisiert bekannte Altrechtsformen, erhält unbekannte
+  Legacytexte zur Bestätigung, migriert vorhandene verschlüsselte USt-IDs ohne Ausgabe
+  ihres Klarwerts und normalisiert widersprüchliche Hauptmarkierungen deterministisch;
+- zusammengesetzte Fremdschlüssel verhindern Kennungszuordnungen zu Gesellschaften eines
+  anderen Mandanten bereits auf Datenbankebene;
+- automatisierte Tests decken Migration, Rückwärtskompatibilität, Katalog-Idempotenz,
+  Aktivierungsregeln, Hauptgesellschaft, Verschlüsselung, maskierte Fehlertexte,
+  Cross-Tenant-Angriffe und Nur-Lesen ab;
+- PHPUnit erzwingt unabhängig von lokalen `.env`-Werten eine flüchtige SQLite-Datenbank;
+  ein separater Isolationstest stoppt den Lauf, falls diese Schutzgrenze verloren geht.
 
 ### Paket C: Partneroberfläche `Unternehmen`
 

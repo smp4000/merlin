@@ -21,7 +21,8 @@ final class StorePartnerOnboardingRequest extends FormRequest
     {
         return [
             'legal_name' => ['required', 'string', 'max:200'],
-            'legal_form' => ['required', Rule::in(['sole_proprietorship', 'gbr', 'ug', 'gmbh', 'ag', 'kg', 'gmbh_co_kg', 'other'])],
+            // Auswahlbarkeit nach Tenantland, Status und Gültigkeit prüft der Service.
+            'legal_form' => ['required', 'string', 'max:100'],
             'billing_street' => ['required', 'string', 'max:160'],
             'billing_house_number' => ['required', 'string', 'max:30'],
             'billing_address_addition' => ['nullable', 'string', 'max:120'],

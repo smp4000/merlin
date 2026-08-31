@@ -22,7 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Ein Bestätigungstoken ist ein kurzlebiges Secret und darf nie als alter
         // Formulareingabewert in der serverseitigen Sitzung gespeichert werden.
-        $exceptions->dontFlash(['confirmation_token']);
+        $exceptions->dontFlash([
+            'confirmation_token',
+            // Steuer- und Bankwerte dürfen nach Validierungsfehlern nicht als Klartext in
+            // der serverseitigen Session oder erneut im HTML-Formular erscheinen.
+            'vat_id',
+            'iban',
+            'account_number',
+        ]);
 
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
