@@ -1,6 +1,6 @@
 # Modul-Blueprint: Partnerverwaltung
 
-Status: `Fachlich freigegeben am 30.08.2026 – Umsetzung in freigegebenen Schnitten`
+Status: `Fachlich freigegeben am 30.08.2026 – Ist-Abgleich und nächster Schnitt am 31.08.2026 ergänzt`
 
 ## 1. Zweck und Abgrenzung
 
@@ -20,6 +20,11 @@ Das Modul ermöglicht:
 Nicht Bestandteil dieses Moduls sind Tankstellenstammdaten, Mitarbeiterfachdaten,
 Schichtplanung, Zeiterfassung, Billing/Zahlung, Lieferanten, Kunden und operative
 Fachmodule. Diese referenzieren den hier geschaffenen Mandantenkontext später nur.
+
+Das geschützte Erst-Onboarding darf als einmaliger Bootstrap bereits die erste
+Rechtsgesellschaft, die erste Tankstelle, deren Kontakt und optional eine Bankverbindung
+anlegen. Die anschließende Pflege zusätzlicher Tankstellen und stationsspezifischer
+Stammdaten bleibt trotzdem Bestandteil der späteren Tankstellenverwaltung.
 
 ## 2. Nutzer und Oberflächen
 
@@ -501,3 +506,186 @@ Steuerkennungen benötigen Hochrisikorecht, Step-up-MFA, kurzlebige Downloads un
 Der Auftraggeber hat diese Entscheidungen und den Blueprint am 30.08.2026 schriftlich
 freigegeben. Anwendungscode wird weiterhin ausschließlich in den definierten,
 einzeln prüfbaren Umsetzungsschnitten erstellt.
+
+## 20. Ist-Abgleich vom 31.08.2026
+
+### Bereits umgesetzt und geprüft
+
+- Registrierung, neutrale E-Mail-Antwort, Bestätigungsseite und idempotente Anlage von
+  Benutzer, Tenant, aktiver Membership und 14-Tage-Trial;
+- sichere manuelle Partner-Einladung aus der Plattformliste;
+- zentrale Auflösung eines aktiven TenantContext ausschließlich über eine wirksame
+  Membership sowie ein zentraler fachlicher Nur-Lesen-Guard;
+- geschütztes Erst-Onboarding für Hauptgesellschaft, erste Tankstelle,
+  Stationskontakt und optionale verschlüsselte Bankverbindung;
+- Bundesbank-Verzeichnis, deutsche IBAN-Prüfung und IBAN-Berechnung als Eingabehilfe;
+- datenarme Plattform-Partnerliste;
+- mandantenbezogene Dashboard-Fortschrittsanzeige ohne Raten eines Tenants bei mehreren
+  aktiven Memberships;
+- automatisierte Tests für Registrierung, Onboarding, Plattform-Einladung,
+  TenantContext, Nur-Lesen-Grundlage, IBAN und Dashboard.
+
+### Noch nicht umgesetzt
+
+- getrennte Filament-Panels für Plattformverwaltung und Partnerarbeit;
+- Partnerprofil- und Gesellschaftsverwaltung nach dem Erst-Onboarding;
+- zentrale, versionierte Rechtsformen und typisierte Gesellschaftskennungen;
+- Datenbankgarantie für genau eine Hauptgesellschaft pro Tenant;
+- vollständige Policies und granulare Permissions der Partnerverwaltung;
+- Administrator-Einladungen, Rollenvergabe und Ownership-Transfer;
+- Trial-Ablaufjob, einmalige Verlängerungsaktion und Erinnerungsnachrichten;
+- mandantenweite Sprachen, Farbschema und weitere Partner-Settings;
+- SupportAccessGrant, Exporte, Löschworkflow und vollständige Fach-Auditansichten.
+
+### Erkannte Modellabweichungen, die vor dem Gesellschaftsformular bereinigt werden
+
+- `legal_entities.legal_form` ist derzeit ein freier Text. Ziel ist eine Referenz auf
+  einen zentralen, deaktivierbaren und historisch stabilen Rechtsformkatalog.
+- Umsatzsteuer-ID liegt derzeit direkt an `legal_entities`. Ziel ist ein typisiertes,
+  verschlüsseltes Identifier-Modell für USt-ID, Steuernummer, Wirtschafts-ID,
+  Register- und Arbeitgeberkennungen.
+- Anschrift und Rechnungsanschrift sind im Bootstrap noch nicht als wiederverwendbare,
+  eindeutig benannte Feldgruppen modelliert. Die Migration muss bestehende Pilotdaten
+  verlustfrei übernehmen.
+- `is_primary` besitzt bisher nur einen Index. Genau eine aktive Hauptgesellschaft muss
+  zusätzlich transaktional und mit Datenbankunterstützung abgesichert werden.
+- Tenant-Sprache und Theme sind bisher nur Grundwerte beziehungsweise globale
+  Designvorgaben; erlaubte Sprachen und mandantenweite Palette fehlen noch.
+
+## 21. Nächster freizugebender Umsetzungsschnitt: Partnerkern
+
+Der nächste Schnitt wird bewusst vor Administratoren, Rollen, Trial-Automation und
+Supportzugriff abgeschlossen. Er besteht aus drei aufeinander aufbauenden Lieferpaketen.
+
+### Paket A: Paneltrennung und autoritativer Arbeitskontext
+
+- Partner-Panel bleibt unter `/admin`, damit bestehende Login- und Onboardinglinks stabil
+  bleiben.
+- Plattform-Panel erhält den Pfad `/platform` und enthält ausschließlich globale
+  Plattformressourcen wie Partner-Metadaten, Brands und Bankverzeichnis.
+- Partnerbenutzer ohne Plattformrolle können das Plattform-Panel weder sehen noch direkt
+  aufrufen; Plattformrollen erhalten aus ihrer Rolle allein keinen Mandanteninhalt.
+- Das Partner-Panel verlangt nach Anmeldung genau einen wirksamen TenantContext. Bei
+  mehreren Memberships erscheint vor dem Dashboard eine bewusste Betriebsauswahl.
+- Tenantwechsel verwirft Navigation, gecachte Permissions, Formularzustände und spätere
+  Stationsauswahl. Eine frei übertragene Tenant-ID gilt nie als Berechtigung.
+- Onboarding, Dashboard und alle folgenden Partnerressourcen verwenden denselben
+  Resolver; parallele, abweichende Tenantauflösungen werden nicht eingeführt.
+
+Abnahme Paket A:
+
+- direkte Aufrufe des jeweils fremden Panels liefern eine neutrale Ablehnung;
+- ein Benutzer mit Memberships in zwei Tenants sieht niemals gemischte Daten;
+- ein Benutzer mit genau einer Membership gelangt ohne unnötigen Zwischenschritt zum
+  eigenen Dashboard;
+- ein Plattform-Super-Admin sieht ohne Supportgrant keine Gesellschafts-, Bank- oder
+  Stationsinhalte;
+- bestehende Registrierungs-, Bestätigungs- und Onboardinglinks funktionieren weiter.
+
+### Paket B: belastbares Partner- und Gesellschaftsmodell
+
+Neue beziehungsweise erweiterte fachliche Strukturen:
+
+- `LegalForm`: zentraler Katalog mit stabilem Schlüssel, lokalisierten Bezeichnungen,
+  Ländern, Status und Gültigkeit; referenzierte Einträge werden deaktiviert statt gelöscht;
+- `LegalEntity`: öffentliche ULID, `tenant_id`, Rechtsformreferenz, Firmierung,
+  Handelsname, Status, Hauptkennzeichen, Wirksamkeitsdatum und strukturierte Geschäfts-
+  sowie optionale Postanschrift;
+- `LegalEntityIdentifier`: `tenant_id`, Gesellschaft, Typ, Land, verschlüsselter Wert,
+  maskierte Anzeige, Fingerprint, Gültigkeit und Status;
+- `TenantBusinessContact`: primäre geschäftliche E-Mail, Telefon, optionale Website und
+  nur fachlich erforderliche Kontaktperson;
+- Tenant-Erweiterung für Onboardingstand und später anschließbare Settings, ohne Trial,
+  Entitlements oder Owner-Verantwortung in frei änderbare Partnerfelder zu mischen.
+
+Verbindliche Identifier-Typen des ersten Schnitts:
+
+- `vat_id` für Umsatzsteuer-ID;
+- `national_tax_number` für nationale Steuernummer;
+- `economic_id` für Wirtschafts-Identifikationsnummer;
+- `commercial_register` für Registernummer einschließlich Registerart und Gericht;
+- `employer_number` für Betriebsnummer beziehungsweise Arbeitgeberkennung.
+
+Validierung und Schutz:
+
+- jede Kindentität erhält eine unveränderliche `tenant_id` und tenant-gebundene
+  Eindeutigkeiten;
+- Aktivierung einer Gesellschaft verlangt Firmierung, aktive Rechtsform, vollständige
+  Geschäftsanschrift, Land und geschäftliche Kontaktadresse;
+- Entwürfe dürfen unvollständig gespeichert werden;
+- es existiert genau eine aktive Hauptgesellschaft; Wechsel erfolgt transaktional;
+- bestehende Onboardingdaten werden in einer vorwärtsgerichteten Migration übernommen;
+  eine bestehende USt-ID wird entschlüsselt, in das Identifier-Modell übertragen und nie
+  im Migrationslog ausgegeben;
+- vorhandene freie Rechtsformtexte werden normalisiert einem Katalogeintrag zugeordnet;
+  nicht sicher zuordenbare Werte bleiben als geschützter Legacy-Anzeigetext erhalten und
+  müssen vor der nächsten fachlichen Änderung bewusst bestätigt werden;
+- Kennungswerte sind verschlüsselt, standardmäßig maskiert und weder suchbar noch in URL,
+  Exception, Audit oder Queue-Payload vollständig enthalten;
+- Dublettenprüfung erfolgt nur tenant-intern über einen kontextgebundenen Fingerprint und
+  offenbart niemals Treffer anderer Mandanten.
+
+Abnahme Paket B:
+
+- bestehende Pilotdaten bleiben vollständig erhalten und dem richtigen Tenant zugeordnet;
+- fremde Tenant-, Gesellschafts-, Rechtsform- und Identifier-IDs werden ohne
+  Existenzoffenlegung abgewiesen;
+- Datenbank- und Servicetests verhindern null oder mehrere aktive Hauptgesellschaften
+  nach einer abgeschlossenen Statusänderung;
+- deaktivierte Rechtsformen bleiben an Bestandsdaten sichtbar, sind aber nicht neu
+  auswählbar;
+- vollständige Kennungen erscheinen in keinem Log-, Audit- oder Fehlertexttest.
+
+### Paket C: Partneroberfläche `Unternehmen`
+
+Navigation und Seiten:
+
+- `Unternehmen → Übersicht` mit Partnernummer, Anzeigename, Typ, Hauptgesellschaft,
+  weiteren Gesellschaften, Onboardingstand und Trialhinweis;
+- `Unternehmen → Gesellschaften` mit tenant-sicherer Liste, Statusfiltern und Aktionen
+  für Entwurf, Bearbeitung, Aktivierung, Deaktivierung und Verlauf;
+- Formular-Tabs `Allgemein`, `Anschrift`, `Register & Kennungen`, `Kontakt`, `Prüfen`;
+- sichtbare Fehler- und Vollständigkeitszustände je Tab, Fehlerübersicht mit Fokusziel,
+  Entwurfsspeicherung und responsive Stepper-/Akkordeondarstellung;
+- gespeicherte Kennungen werden maskiert. Eine vollständige Anzeige wird in diesem
+  Schnitt noch nicht angeboten, bis Step-up-MFA und Hochrisikopermission umgesetzt sind;
+- Partnerprofiländerungen und Gesellschaftsaktionen verwenden Services und Policies,
+  nicht direkte ungeschützte Filament-Modellschreibvorgänge.
+
+Erste Rollenfreigabe dieses Pakets:
+
+- Tenant Owner darf eigenes Partnerprofil und eigene Gesellschaften lesen und ändern;
+- die bestehende Administrator-Membership erhält vor Einführung des vollständigen
+  Rollensystems ausschließlich den ausdrücklich definierten Partnerverwaltungsumfang;
+- Stationsleitungen erhalten keinen Zugriff auf diese Navigation;
+- Nur-Lesen-Tenants dürfen alle zulässigen Seiten sehen, aber keine fachliche Aktion
+  speichern, auch nicht über direkte URLs oder alte Formularzustände.
+
+Abnahme Paket C:
+
+- Browser-, Policy- und Featuretests decken Erstellen, Entwurf, Aktivieren, Deaktivieren,
+  Hauptgesellschaftswechsel und Nur-Lesen ab;
+- Cross-Tenant-Tests manipulieren Route, Formular, Relation, Suche, Filter und
+  Stapelaktion;
+- Formulare sind per Tastatur bedienbar, melden Fehler verständlich auf Deutsch und
+  funktionieren auf Desktop, Tablet und Mobilgerät ohne horizontales Scrollen;
+- englische technische Bezeichner sowie ausführliche deutsche PHPDoc- und gezielte
+  Inline-Kommentare dokumentieren insbesondere Tenantgrenzen, Kennungsschutz und
+  Statusübergänge;
+- vollständiger Laravel-Testlauf, Frontendtests und Produktions-Build sind grün;
+- keine kritischen oder hohen Securitybefunde bleiben offen.
+
+## 22. Bewusst nachgelagerte Partnerverwaltungs-Schnitte
+
+Nach erfolgreicher Abnahme des Partnerkerns folgen jeweils separat geplant und geprüft:
+
+1. Administrator-Einladungen, Membership-Lifecycle und sichere Ownership-Übertragung;
+2. Rollen, eigene Partnerrollen, Delegationsgrenzen und zeitliche Vertretungen;
+3. Trial-Automation, Erinnerungen, einmalige Verlängerung und Nur-Lesen-Kommunikation;
+4. Sprache, erlaubte Sprachen, regionale Werte und mandantenweites Farbschema;
+5. Auditansichten, asynchrone Exporte und Datenschutz-/Schließungsworkflow;
+6. SupportAccessGrant und Break-glass mit Step-up-MFA, Scope und Zeitlimit.
+
+Keiner dieser nachgelagerten Schnitte wird stillschweigend in den Partnerkern gezogen.
+Jeder erhält vor Implementierung eigene Datenflüsse, Missbrauchsfälle, Tests und eine
+ausdrückliche Freigabe.
