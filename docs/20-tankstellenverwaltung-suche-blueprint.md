@@ -307,19 +307,28 @@ Duplikatwarnung direkt am Treffer angezeigt. Unterhalb der Liste bleibt die Akti
 Eine Kartenansicht gehört nicht zum ersten Umsetzungsschnitt. Die Listenansicht muss auf
 Desktop, Tablet und Mobilgerät vollständig bedienbar sein.
 
-### Anlage-Stepper
+### Anlage-Wizard
 
-1. `Suchen`
-2. `Treffer auswählen`
-3. `Grunddaten prüfen`
-4. `Details ergänzen`
-5. `Prüfen & aktivieren`
+Die Suche bildet den vorgeschalteten Auswahlbereich. Sobald eine Tankstelle gewählt oder
+die manuelle Erfassung gestartet wurde, klappt dieser Bereich zu einer kompakten
+Zusammenfassung ein. `Auswahl ändern` öffnet ihn ohne Verlust bereits ergänzter Werte.
+
+Der erste freigegebene Grunddatenschnitt führt anschließend durch drei echte Schritte:
+
+1. `Allgemein` – Betreiber, Marke, Stationsname und Kurzname;
+2. `Adresse` – Straße, Hausnummer, Zusatz, PLZ, Ort und Bundesland;
+3. `Prüfen` – Zusammenfassung und Speichern als Entwurf.
+
+`Weiter` validiert ausschließlich den sichtbaren Schritt. Fehler bleiben am sichtbaren
+Feld; die Enter-Taste darf den Wizard nicht überspringen. Eingabeflächen besitzen in
+Ruhe-, Hover-, Fokus- und Fehlerzustand einen klar erkennbaren Rahmen und ausreichenden
+Kontrast.
 
 Direkt unter der Suchüberschrift steht dauerhaft:
 
 > Die Suche fragt benzinpreis-aktuell.de ab. Alternativ können Sie ohne Suche weitergehen.
 
-Die Detailbearbeitung nutzt das frische Merlin-Tabdesign:
+Die spätere vollständige Detailbearbeitung erweitert das frische Merlin-Tabdesign um:
 
 - `Allgemein`
 - `Adresse`

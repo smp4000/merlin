@@ -74,12 +74,22 @@ final class StationPagesTest extends TestCase
 
         Livewire::test(StationCreate::class)
             ->call('startManual')
+            ->assertSet('detailsVisible', true)
+            ->assertSet('wizardStep', 1)
+            ->assertSee('Manuelle Erfassung')
+            ->assertSee('Auswahl ändern')
             ->set('name', 'Manuelle Pilotstation')
+            ->call('nextWizardStep')
+            ->assertHasNoErrors()
+            ->assertSet('wizardStep', 2)
             ->set('street', 'Teststraße')
             ->set('houseNumber', '7')
             ->set('postalCode', '36100')
             ->set('city', 'Petersberg')
             ->set('region', 'Hessen')
+            ->call('nextWizardStep')
+            ->assertHasNoErrors()
+            ->assertSet('wizardStep', 3)
             ->call('save')
             ->assertHasNoErrors()
             ->assertRedirect(StationOverview::getUrl());
@@ -90,6 +100,33 @@ final class StationPagesTest extends TestCase
             'source_type' => 'manual',
             'status' => 'draft',
         ]);
+    }
+
+    public function test_wizard_keeps_validation_errors_in_the_visible_step_and_allows_back_navigation(): void
+    {
+        [$user, $tenant] = $this->partner('Wizard Pilot');
+        $tenant->load('trial', 'memberships');
+        app()->instance(TenantContext::class, new TenantContext($tenant, $tenant->memberships->firstOrFail()));
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+        $this->actingAs($user);
+
+        Livewire::test(StationCreate::class)
+            ->call('startManual')
+            ->call('nextWizardStep')
+            ->assertHasErrors(['name'])
+            ->assertSet('wizardStep', 1)
+            ->set('name', 'Wizard Station')
+            ->call('nextWizardStep')
+            ->assertHasNoErrors()
+            ->assertSet('wizardStep', 2)
+            ->call('nextWizardStep')
+            ->assertHasErrors(['street', 'houseNumber', 'postalCode', 'city', 'region'])
+            ->assertSet('wizardStep', 2)
+            ->call('previousWizardStep')
+            ->assertSet('wizardStep', 1)
+            ->call('changeSelection')
+            ->assertSet('detailsVisible', false)
+            ->assertSet('selectedReference', null);
     }
 
     /** @return array{User, Tenant, LegalEntity} */

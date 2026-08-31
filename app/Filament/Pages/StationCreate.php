@@ -51,6 +51,8 @@ final class StationCreate extends Page
 
     public bool $detailsVisible = false;
 
+    public int $wizardStep = 1;
+
     public bool $duplicateWarning = false;
 
     public ?string $selectedReference = null;
@@ -178,6 +180,7 @@ final class StationCreate extends Page
 
         $this->manualMode = false;
         $this->detailsVisible = true;
+        $this->wizardStep = 1;
         $this->name = $details->name;
         $this->street = $details->street;
         $this->houseNumber = $details->houseNumber;
@@ -199,14 +202,70 @@ final class StationCreate extends Page
         }
         $this->manualMode = true;
         $this->detailsVisible = true;
+        $this->wizardStep = 1;
         $this->selectedReference = null;
         $this->searchWarning = null;
+    }
+
+    /**
+     * Öffnet die Stationssuche erneut und verwirft nur die noch ungespeicherte Auswahl.
+     *
+     * Bereits eingegebene Formularwerte bleiben bewusst erhalten. Dadurch verliert eine
+     * Person ihre Ergänzungen nicht, wenn lediglich ein anderer Verzeichnistreffer geprüft
+     * werden soll. Beim nächsten Treffer werden ausschließlich die gelieferten Suchwerte
+     * erneut vorbelegt.
+     */
+    public function changeSelection(): void
+    {
+        abort_if($this->linkStationPublicId !== null, 403);
+
+        $this->detailsVisible = false;
+        $this->manualMode = false;
+        $this->selectedReference = null;
+        $this->wizardStep = 1;
+        $this->resetValidation();
+    }
+
+    /**
+     * Validiert den sichtbaren Wizard-Schritt und öffnet erst danach den Folgeschritt.
+     *
+     * Fehler verbleiben dadurch unmittelbar bei den sichtbaren Feldern. Verdeckte Felder
+     * späterer Schritte blockieren die Navigation nicht vorzeitig.
+     */
+    public function nextWizardStep(): void
+    {
+        if ($this->wizardStep === 1) {
+            $this->validate($this->generalRules(), attributes: $this->attributeLabels());
+            $this->wizardStep = 2;
+
+            return;
+        }
+
+        if ($this->wizardStep === 2) {
+            $this->validate($this->addressRules(), attributes: $this->attributeLabels());
+            $this->wizardStep = 3;
+        }
+    }
+
+    /** Kehrt ohne Datenverlust zum vorherigen Wizard-Schritt zurück. */
+    public function previousWizardStep(): void
+    {
+        $this->wizardStep = max(1, $this->wizardStep - 1);
     }
 
     /** Speichert einen Entwurf über die zentrale, tenantgebundene Anwendungsgrenze. */
     public function save(CreateStation $creator, StationSearchProvider $provider): mixed
     {
         abort_if($this->linkStationPublicId !== null, 403);
+
+        // Auch die Enter-Taste darf den Wizard nicht überspringen. Ein vorzeitiges
+        // Formular-Submit validiert deshalb nur den sichtbaren Schritt und navigiert weiter.
+        if ($this->wizardStep < 3) {
+            $this->nextWizardStep();
+
+            return null;
+        }
+
         $validated = $this->validate($this->stationRules(), attributes: $this->attributeLabels());
         $externalDetails = $this->selectedReference === null ? null : $provider->details($this->selectedReference);
 
@@ -304,11 +363,26 @@ final class StationCreate extends Page
     /** @return array<string, array<int, mixed>> */
     private function stationRules(): array
     {
+        return array_merge($this->generalRules(), $this->addressRules(), [
+            'duplicateReason' => [$this->duplicateWarning ? 'required' : 'nullable', 'string', 'max:500'],
+        ]);
+    }
+
+    /** @return array<string, array<int, mixed>> */
+    private function generalRules(): array
+    {
         return [
             'legalEntityPublicId' => ['required', 'string'],
             'brandId' => ['nullable', 'integer'],
             'name' => ['required', 'string', 'max:160'],
             'shortName' => ['nullable', 'string', 'max:80'],
+        ];
+    }
+
+    /** @return array<string, array<int, mixed>> */
+    private function addressRules(): array
+    {
+        return [
             'street' => ['required', 'string', 'max:160'],
             'houseNumber' => ['required', 'string', 'max:30'],
             'addressAddition' => ['nullable', 'string', 'max:120'],
@@ -318,7 +392,6 @@ final class StationCreate extends Page
             'countryCode' => ['required', Rule::in(['DE'])],
             'timezone' => ['required', Rule::in(['Europe/Berlin'])],
             'defaultLocale' => ['required', Rule::in(config('merlin.registration.supported_locales'))],
-            'duplicateReason' => [$this->duplicateWarning ? 'required' : 'nullable', 'string', 'max:500'],
         ];
     }
 

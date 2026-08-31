@@ -804,6 +804,39 @@
     padding: clamp(1.3rem, 3vw, 2rem);
 }
 
+.merlin-search-panel.is-collapsed {
+    padding-block: 1rem;
+}
+
+.merlin-selected-station {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.merlin-selected-station__icon {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border-radius: 0.9rem;
+    background: var(--merlin-mint);
+    color: var(--merlin-petrol);
+    font-size: 1.1rem;
+    font-weight: 850;
+}
+
+.merlin-selected-station h2 {
+    font-size: 1.05rem;
+}
+
+.merlin-selected-station p {
+    margin-top: 0.2rem;
+    color: var(--merlin-muted);
+    font-size: 0.8rem;
+}
+
 .merlin-search-form {
     display: grid;
     grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 0.6fr) auto;
@@ -824,11 +857,15 @@
 .merlin-station-create select,
 .merlin-station-create textarea {
     width: 100%;
-    border: 1px solid var(--merlin-border-strong);
+    border: 2px solid #b9c9ce;
     border-radius: 0.8rem;
-    background: white;
+    background-color: #fff !important;
     color: var(--merlin-navy-deep);
     font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgb(2 32 48 / 0.06), inset 0 0 0 1px rgb(255 255 255 / 0.7);
+    opacity: 1;
+    appearance: auto;
 }
 
 .merlin-station-create input,
@@ -839,6 +876,32 @@
 
 .merlin-station-create textarea {
     padding: 0.75rem;
+}
+
+.merlin-station-create input:hover,
+.merlin-station-create select:hover,
+.merlin-station-create textarea:hover {
+    border-color: #78959e;
+}
+
+.merlin-station-create input:focus,
+.merlin-station-create select:focus,
+.merlin-station-create textarea:focus {
+    border-color: var(--merlin-petrol);
+    box-shadow: 0 0 0 4px rgb(13 148 136 / 0.13);
+}
+
+.merlin-station-create [aria-invalid="true"] {
+    border-color: #dc2626;
+    background-color: #fffafa !important;
+}
+
+.merlin-field {
+    align-content: start;
+    border: 1px solid #dbe5e7;
+    border-radius: 1rem;
+    padding: 0.85rem;
+    background: #f7faf9;
 }
 
 .merlin-field-error {
@@ -914,7 +977,11 @@
     background: #f3f7f6;
 }
 
-.merlin-form-tabs span {
+.merlin-form-tabs > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
     border-radius: 0.7rem;
     padding: 0.7rem;
     color: var(--merlin-muted);
@@ -923,10 +990,50 @@
     text-align: center;
 }
 
-.merlin-form-tabs span.is-active {
+.merlin-form-tabs > div > span {
+    display: grid;
+    width: 1.5rem;
+    height: 1.5rem;
+    place-items: center;
+    border-radius: 999px;
+    background: #e3eceb;
+    font-size: 0.7rem;
+}
+
+.merlin-form-tabs > div.is-active {
     background: white;
     color: var(--merlin-petrol);
     box-shadow: var(--merlin-shadow-soft);
+}
+
+.merlin-form-tabs > div.is-active > span,
+.merlin-form-tabs > div.is-complete > span {
+    background: var(--merlin-petrol);
+    color: white;
+}
+
+.merlin-form-tabs > div.is-complete {
+    color: var(--merlin-petrol);
+}
+
+.merlin-wizard-step {
+    min-width: 0;
+    border: 0;
+    padding: 0;
+}
+
+.merlin-wizard-step legend,
+.merlin-wizard-step h3 {
+    color: var(--merlin-navy-deep);
+    font-size: 1.08rem;
+    font-weight: 780;
+}
+
+.merlin-wizard-step > p {
+    margin: 0.35rem 0 1rem;
+    color: var(--merlin-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
 }
 
 .merlin-form-grid,
@@ -942,6 +1049,32 @@
 
 .merlin-form-actions {
     margin-top: 1.5rem;
+}
+
+.merlin-station-review {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.merlin-station-review article {
+    display: grid;
+    gap: 0.3rem;
+    border: 1px solid #d6e2e4;
+    border-radius: 1rem;
+    padding: 1rem;
+    background: #f7faf9;
+}
+
+.merlin-station-review span,
+.merlin-station-review small {
+    color: var(--merlin-muted);
+    font-size: 0.78rem;
+}
+
+.merlin-station-review strong {
+    color: var(--merlin-navy-deep);
+    font-weight: 780;
 }
 
 .merlin-comparison-grid {
@@ -970,6 +1103,7 @@
     .merlin-station-heading,
     .merlin-station-card__title,
     .merlin-search-result,
+    .merlin-selected-station,
     .merlin-form-actions {
         align-items: stretch;
         flex-direction: column;
@@ -978,6 +1112,7 @@
     .merlin-search-form,
     .merlin-form-grid,
     .merlin-comparison-grid,
+    .merlin-station-review,
     .merlin-station-meta {
         grid-template-columns: 1fr;
     }
