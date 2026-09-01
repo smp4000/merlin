@@ -91,7 +91,7 @@ final class StationPagesTest extends TestCase
         $this->get('/admin/stationen/unknown/bearbeiten')->assertRedirect('/admin/login');
     }
 
-    public function test_edit_page_is_tenant_scoped_and_saves_through_wizard(): void
+    public function test_edit_page_is_tenant_scoped_and_saves_through_freely_selectable_tabs(): void
     {
         [$user, $tenant, $entity] = $this->partner('Bearbeitungsbetrieb');
         $station = $this->station($tenant, $entity, 'Alte Stationsbezeichnung');
@@ -116,18 +116,39 @@ final class StationPagesTest extends TestCase
         $this->actingAs($user);
 
         Livewire::test(StationEdit::class, ['station' => (string) $station->public_id])
-            ->assertSet('wizardStep', 1)
+            ->assertSet('activeTab', 'general')
+            ->assertSee('Bereiche der Stationsbearbeitung')
             ->set('name', 'Neue Stationsbezeichnung')
-            ->call('nextWizardStep')
-            ->assertSet('wizardStep', 2)
+            ->call('selectTab', 'address')
+            ->assertSet('activeTab', 'address')
             ->set('region', 'Hessen')
-            ->call('nextWizardStep')
-            ->assertSet('wizardStep', 3)
             ->call('save')
             ->assertHasNoErrors()
             ->assertRedirect(StationOverview::getUrl());
 
         self::assertSame('Neue Stationsbezeichnung', $station->fresh()->name);
+    }
+
+    public function test_edit_validation_opens_the_tab_containing_the_first_error(): void
+    {
+        [$user, $tenant, $entity] = $this->partner('Tabvalidierung');
+        $station = $this->station($tenant, $entity, 'Validierungsstation');
+        $tenant->load('trial', 'memberships');
+        app()->instance(TenantContext::class, new TenantContext($tenant, $tenant->memberships->firstOrFail()));
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+        $this->actingAs($user);
+
+        Livewire::test(StationEdit::class, ['station' => (string) $station->public_id])
+            ->call('selectTab', 'address')
+            ->set('name', '')
+            ->call('save')
+            ->assertHasErrors(['name'])
+            ->assertSet('activeTab', 'general')
+            ->set('name', 'Validierungsstation')
+            ->set('postalCode', '12')
+            ->call('save')
+            ->assertHasErrors(['postalCode'])
+            ->assertSet('activeTab', 'address');
     }
 
     public function test_livewire_manual_flow_creates_station_through_application_service(): void

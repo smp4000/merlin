@@ -1039,6 +1039,178 @@
     color: var(--merlin-petrol);
 }
 
+/* Frei wechselbare Bearbeitungstabs sind bewusst vom Anlage-Wizard getrennt. */
+.merlin-edit-form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.merlin-edit-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--merlin-border);
+    padding-bottom: 0.9rem;
+}
+
+.merlin-edit-tabs > button {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    border: 1px solid var(--merlin-border);
+    border-radius: 1rem;
+    padding: 0.9rem 1rem;
+    background: #f7faf9;
+    color: var(--merlin-navy-deep);
+    text-align: left;
+    transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.merlin-edit-tabs > button:hover {
+    border-color: color-mix(in oklab, var(--merlin-accent), transparent 48%);
+    transform: translateY(-1px);
+}
+
+.merlin-edit-tabs > button:focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--merlin-accent-focus), transparent 55%);
+    outline-offset: 2px;
+}
+
+.merlin-edit-tabs > button.is-active {
+    border-color: var(--merlin-accent);
+    background: color-mix(in oklab, var(--merlin-accent-soft), white 62%);
+    box-shadow: 0 0.65rem 1.4rem color-mix(in oklab, var(--merlin-accent), transparent 88%);
+}
+
+.merlin-edit-tabs > button.has-errors {
+    border-color: #dc2626;
+}
+
+.merlin-edit-tabs__icon {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border-radius: 0.75rem;
+    background: white;
+    color: var(--merlin-accent);
+    box-shadow: 0 0 0 1px var(--merlin-border);
+    font-size: 0.78rem;
+    font-weight: 850;
+}
+
+.merlin-edit-tabs strong,
+.merlin-edit-tabs small {
+    display: block;
+}
+
+.merlin-edit-tabs strong {
+    font-size: 0.9rem;
+}
+
+.merlin-edit-tabs small {
+    margin-top: 0.15rem;
+    color: var(--merlin-muted);
+    font-size: 0.72rem;
+}
+
+.merlin-tab-error {
+    display: grid;
+    min-width: 1.55rem;
+    height: 1.55rem;
+    place-items: center;
+    border-radius: 999px;
+    background: #dc2626;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.merlin-edit-tab-panel {
+    display: grid;
+    gap: 1rem;
+    animation: merlin-tab-enter 160ms ease-out;
+}
+
+.merlin-edit-tab-panel__heading h3 {
+    color: var(--merlin-navy-deep);
+    font-size: 1.08rem;
+    font-weight: 780;
+}
+
+.merlin-edit-tab-panel__heading p {
+    margin-top: 0.3rem;
+    color: var(--merlin-muted);
+    font-size: 0.84rem;
+}
+
+.merlin-edit-context {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    border-top: 1px solid var(--merlin-border);
+    padding-top: 1rem;
+}
+
+.merlin-edit-context > div {
+    display: grid;
+    gap: 0.15rem;
+    border-radius: 0.85rem;
+    padding: 0.75rem;
+    background: #f7faf9;
+}
+
+.merlin-edit-context span,
+.merlin-edit-context small {
+    color: var(--merlin-muted);
+    font-size: 0.75rem;
+}
+
+.merlin-edit-context strong {
+    color: var(--merlin-navy-deep);
+    font-size: 0.82rem;
+}
+
+.merlin-edit-context > small {
+    grid-column: 1 / -1;
+}
+
+.merlin-edit-actions {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    border: 1px solid var(--merlin-border);
+    border-radius: 1rem;
+    padding: 0.85rem;
+    background: rgb(255 255 255 / 0.96);
+    box-shadow: 0 0.85rem 2rem rgb(2 32 48 / 0.12);
+    backdrop-filter: blur(10px);
+}
+
+.merlin-edit-actions__dirty {
+    color: #92400e;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+@keyframes merlin-tab-enter {
+    from {
+        opacity: 0;
+        transform: translateY(0.25rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .merlin-wizard-step {
     min-width: 0;
     border: 0;
@@ -1320,5 +1492,25 @@
 
     .merlin-form-tabs {
         grid-template-columns: 1fr;
+    }
+
+    .merlin-edit-tabs,
+    .merlin-edit-context {
+        grid-template-columns: 1fr;
+    }
+
+    .merlin-edit-context > small {
+        grid-column: auto;
+    }
+
+    .merlin-edit-actions {
+        bottom: 0.5rem;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .merlin-edit-actions__dirty {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        text-align: left;
     }
 }

@@ -18,7 +18,7 @@
             </div>
         </section>
 
-        <form class="merlin-form-panel" wire:submit="save">
+        <form class="merlin-form-panel merlin-edit-form" wire:submit="save">
             <div class="merlin-form-panel__heading">
                 <span class="merlin-eyebrow">{{ __('stations.edit.form_eyebrow') }}</span>
                 <h2>{{ __('stations.edit.heading') }}</h2>
@@ -29,20 +29,62 @@
                 <div class="merlin-notice is-error" role="alert">{{ $message }}</div>
             @enderror
 
-            <div class="merlin-form-tabs" aria-label="{{ __('stations.create.tabs_label') }}">
-                @foreach ([1 => 'general', 2 => 'address', 3 => 'review'] as $step => $label)
-                    <div @class(['is-active' => $wizardStep === $step, 'is-complete' => $wizardStep > $step])
-                         @if ($wizardStep === $step) aria-current="step" @endif>
-                        <span>{{ $wizardStep > $step ? '✓' : $step }}</span>
-                        <strong>{{ __('stations.tabs.'.$label) }}</strong>
-                    </div>
-                @endforeach
+            @php
+                $generalErrorCount = collect(['legalEntityPublicId', 'brandId', 'name', 'shortName'])
+                    ->sum(fn (string $field): int => count($errors->get($field)));
+                $addressErrorCount = collect(['street', 'houseNumber', 'addressAddition', 'postalCode', 'city', 'region'])
+                    ->sum(fn (string $field): int => count($errors->get($field)));
+            @endphp
+
+            <div class="merlin-edit-tabs" role="tablist" aria-label="{{ __('stations.edit.tabs_label') }}">
+                <button
+                    id="station-tab-general"
+                    type="button"
+                    role="tab"
+                    aria-controls="station-panel-general"
+                    aria-selected="{{ $activeTab === 'general' ? 'true' : 'false' }}"
+                    @class(['is-active' => $activeTab === 'general', 'has-errors' => $generalErrorCount > 0])
+                    wire:click="selectTab('general')"
+                >
+                    <span class="merlin-edit-tabs__icon" aria-hidden="true">A</span>
+                    <span>
+                        <strong>{{ __('stations.tabs.general') }}</strong>
+                        <small>{{ __('stations.edit.general_tab_description') }}</small>
+                    </span>
+                    @if ($generalErrorCount > 0)
+                        <span class="merlin-tab-error" aria-label="{{ trans_choice('stations.edit.tab_errors', $generalErrorCount, ['count' => $generalErrorCount]) }}">
+                            {{ $generalErrorCount }}
+                        </span>
+                    @endif
+                </button>
+                <button
+                    id="station-tab-address"
+                    type="button"
+                    role="tab"
+                    aria-controls="station-panel-address"
+                    aria-selected="{{ $activeTab === 'address' ? 'true' : 'false' }}"
+                    @class(['is-active' => $activeTab === 'address', 'has-errors' => $addressErrorCount > 0])
+                    wire:click="selectTab('address')"
+                >
+                    <span class="merlin-edit-tabs__icon" aria-hidden="true">O</span>
+                    <span>
+                        <strong>{{ __('stations.tabs.address') }}</strong>
+                        <small>{{ __('stations.edit.address_tab_description') }}</small>
+                    </span>
+                    @if ($addressErrorCount > 0)
+                        <span class="merlin-tab-error" aria-label="{{ trans_choice('stations.edit.tab_errors', $addressErrorCount, ['count' => $addressErrorCount]) }}">
+                            {{ $addressErrorCount }}
+                        </span>
+                    @endif
+                </button>
             </div>
 
-            @if ($wizardStep === 1)
-                <fieldset class="merlin-wizard-step">
-                    <legend>{{ __('stations.create.general_heading') }}</legend>
-                    <p>{{ __('stations.edit.general_description') }}</p>
+            @if ($activeTab === 'general')
+                <section id="station-panel-general" role="tabpanel" aria-labelledby="station-tab-general" class="merlin-edit-tab-panel">
+                    <div class="merlin-edit-tab-panel__heading">
+                        <h3>{{ __('stations.create.general_heading') }}</h3>
+                        <p>{{ __('stations.edit.general_description') }}</p>
+                    </div>
                     <div class="merlin-form-grid">
                         <label class="merlin-field">
                             <span>{{ __('stations.fields.legal_entity') }} *</span>
@@ -74,11 +116,13 @@
                             @error('shortName') <small class="merlin-field-error">{{ $message }}</small> @enderror
                         </label>
                     </div>
-                </fieldset>
-            @elseif ($wizardStep === 2)
-                <fieldset class="merlin-wizard-step">
-                    <legend>{{ __('stations.create.address_heading') }}</legend>
-                    <p>{{ __('stations.edit.address_description') }}</p>
+                </section>
+            @else
+                <section id="station-panel-address" role="tabpanel" aria-labelledby="station-tab-address" class="merlin-edit-tab-panel">
+                    <div class="merlin-edit-tab-panel__heading">
+                        <h3>{{ __('stations.create.address_heading') }}</h3>
+                        <p>{{ __('stations.edit.address_description') }}</p>
+                    </div>
                     <div class="merlin-form-grid">
                         <label class="merlin-field">
                             <span>{{ __('stations.fields.street') }} *</span>
@@ -111,38 +155,11 @@
                             @error('region') <small class="merlin-field-error">{{ $message }}</small> @enderror
                         </label>
                     </div>
-                </fieldset>
-            @else
-                <section class="merlin-wizard-step" aria-labelledby="station-edit-review-heading">
-                    <h3 id="station-edit-review-heading">{{ __('stations.edit.review_heading') }}</h3>
-                    <p>{{ __('stations.edit.review_description') }}</p>
-                    <div class="merlin-station-review">
-                        <article>
-                            <span>{{ __('stations.tabs.general') }}</span>
-                            <strong>{{ $name }}</strong>
-                            <small>{{ $brands->firstWhere('id', $brandId)?->name ?? __('stations.values.not_assigned') }}</small>
-                        </article>
-                        <article>
-                            <span>{{ __('stations.tabs.address') }}</span>
-                            <strong>{{ trim($street.' '.$houseNumber) }}</strong>
-                            <small>{{ $postalCode }} {{ $city }} · {{ $region }}</small>
-                        </article>
-                        <article>
-                            <span>{{ __('stations.fields.status') }}</span>
-                            <strong>{{ __('stations.statuses.'.$station->status) }}</strong>
-                            <small>{{ __('stations.edit.status_unchanged') }}</small>
-                        </article>
-                        <article>
-                            <span>{{ __('stations.fields.source') }}</span>
-                            <strong>{{ __('stations.sources.'.$station->source_type) }}</strong>
-                            <small>{{ __('stations.edit.source_unchanged') }}</small>
-                        </article>
-                    </div>
                 </section>
             @endif
 
             @if ($duplicateWarning)
-                <div class="merlin-notice is-warning" role="alert">
+                <div class="merlin-notice is-warning">
                     <strong>{{ __('stations.duplicate.heading') }}</strong>
                     <p>{{ __('stations.duplicate.edit_description') }}</p>
                     <label class="merlin-field">
@@ -153,23 +170,26 @@
                 </div>
             @endif
 
-            <div class="merlin-form-actions">
+            <aside class="merlin-edit-context" aria-label="{{ __('stations.edit.unchanged_data') }}">
                 <div>
-                    @if ($wizardStep === 1)
-                        <a class="merlin-secondary-button" href="{{ $backUrl }}" wire:navigate>{{ __('stations.actions.cancel') }}</a>
-                    @else
-                        <button class="merlin-secondary-button" type="button" wire:click="previousWizardStep">← {{ __('stations.actions.previous') }}</button>
-                    @endif
+                    <span>{{ __('stations.fields.status') }}</span>
+                    <strong>{{ __('stations.statuses.'.$station->status) }}</strong>
                 </div>
-                @if ($wizardStep < 3)
-                    <button class="merlin-primary-button" type="button" wire:click="nextWizardStep" wire:loading.attr="disabled">
-                        {{ __('stations.actions.next') }} →
-                    </button>
-                @else
-                    <button class="merlin-primary-button" type="submit" wire:loading.attr="disabled">
-                        {{ __('stations.actions.save_changes') }}
-                    </button>
-                @endif
+                <div>
+                    <span>{{ __('stations.fields.source') }}</span>
+                    <strong>{{ __('stations.sources.'.$station->source_type) }}</strong>
+                </div>
+                <small>{{ __('stations.edit.status_and_source_unchanged') }}</small>
+            </aside>
+
+            <div class="merlin-edit-actions">
+                <a class="merlin-secondary-button" href="{{ $backUrl }}" wire:navigate>{{ __('stations.actions.cancel') }}</a>
+                <span class="merlin-edit-actions__dirty" wire:dirty wire:target="legalEntityPublicId,brandId,name,shortName,street,houseNumber,addressAddition,postalCode,city,region">
+                    {{ __('stations.edit.unsaved_changes') }}
+                </span>
+                <button class="merlin-primary-button" type="submit" wire:loading.attr="disabled">
+                    {{ __('stations.actions.save_changes') }}
+                </button>
             </div>
         </form>
     </div>

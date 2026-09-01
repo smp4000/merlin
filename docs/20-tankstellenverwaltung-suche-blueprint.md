@@ -299,8 +299,11 @@ horizontal zugängliche Tabelle. Der während des Onboardings angelegte Standort
 sichtbar. Tenantweite Suche, Filter und Stapelaktionen bleiben durch Policies geschützt.
 
 Jede Karte und Tabellenzeile bietet `Bearbeiten`. Der erste Bearbeitungsschnitt umfasst
-Betreiber, Marke, Namen und strukturierte Anschrift im dreistufigen Wizard. Status,
-Herkunft und Verzeichnisreferenzen sind dort unveränderlich. Änderungen werden mit
+Betreiber, Marke, Namen und strukturierte Anschrift in frei wechselbaren, modernen Tabs.
+Ein Wizard bleibt ausschließlich der erstmaligen Anlage vorbehalten. Beim Bearbeiten
+werden alle sichtbaren Bereiche gemeinsam gespeichert; Tabs mit Fehlern werden markiert
+und der erste fehlerhafte Bereich automatisch geöffnet. Status, Herkunft und
+Verzeichnisreferenzen sind dort unveränderlich. Änderungen werden mit
 optimistischer Versionsprüfung gespeichert; bei parallelen Änderungen muss die Seite neu
 geöffnet werden. Eine geänderte Anschrift verwirft veraltete Koordinaten und hebt die
 bisherige Quellenbestätigung auf, ohne die Verzeichnisreferenz zu löschen.

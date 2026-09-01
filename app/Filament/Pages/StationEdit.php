@@ -16,6 +16,7 @@ use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Bearbeitet freigegebene Stationsgrunddaten im aktiven TenantContext.
@@ -36,7 +37,7 @@ final class StationEdit extends Page
 
     public string $stationVersion = '';
 
-    public int $wizardStep = 1;
+    public string $activeTab = 'general';
 
     public bool $duplicateWarning = false;
 
@@ -68,7 +69,7 @@ final class StationEdit extends Page
 
     public string $duplicateReason = '';
 
-    /** Lädt die Station ausschließlich aus dem aktiven Mandanten und befüllt den Wizard. */
+    /** Lädt die Station ausschließlich aus dem aktiven Mandanten und befüllt das Tabformular. */
     public function mount(string $station): void
     {
         $record = $this->station($station);
@@ -94,38 +95,33 @@ final class StationEdit extends Page
         return __('stations.edit.title');
     }
 
-    /** Validiert nur den sichtbaren Schritt und öffnet danach den nächsten Bereich. */
-    public function nextWizardStep(): void
+    /**
+     * Wechselt ohne Zwischenvalidierung zu einem freigegebenen Bearbeitungstab.
+     *
+     * Die Eingaben bleiben als Livewire-Zustand erhalten. Manipulierte Tabnamen werden
+     * nicht als dynamische Views oder Methoden interpretiert, sondern neutral verworfen.
+     */
+    public function selectTab(string $tab): void
     {
-        if ($this->wizardStep === 1) {
-            $this->validate($this->generalRules(), attributes: $this->attributeLabels());
-            $this->wizardStep = 2;
-
+        if (! in_array($tab, ['general', 'address'], true)) {
             return;
         }
 
-        if ($this->wizardStep === 2) {
-            $this->validate($this->addressRules(), attributes: $this->attributeLabels());
-            $this->wizardStep = 3;
-        }
-    }
-
-    /** Kehrt ohne Datenverlust zum vorherigen Wizard-Schritt zurück. */
-    public function previousWizardStep(): void
-    {
-        $this->wizardStep = max(1, $this->wizardStep - 1);
+        $this->activeTab = $tab;
     }
 
     /** Speichert den Grunddatensatz über den konflikt- und tenantgeschützten Dienst. */
     public function save(UpdateStation $service): mixed
     {
-        if ($this->wizardStep < 3) {
-            $this->nextWizardStep();
+        try {
+            $validated = $this->validate($this->stationRules(), attributes: $this->attributeLabels());
+        } catch (ValidationException $exception) {
+            // Das erste fehlerhafte Feld bestimmt den sichtbaren Tab. Dadurch bleiben
+            // Validierungsfehler auch bei frei wechselbaren Bereichen niemals verborgen.
+            $this->activeTab = $this->tabForValidationErrors(array_keys($exception->errors()));
 
-            return null;
+            throw $exception;
         }
-
-        $validated = $this->validate($this->stationRules(), attributes: $this->attributeLabels());
 
         /** @var User $actor */
         $actor = auth()->user();
@@ -156,6 +152,7 @@ final class StationEdit extends Page
             );
         } catch (PotentialStationDuplicateException) {
             $this->duplicateWarning = true;
+            $this->activeTab = 'address';
             $this->addError('duplicateReason', __('stations.validation.duplicate_reason_required'));
 
             return null;
@@ -220,6 +217,21 @@ final class StationEdit extends Page
             'timezone' => ['required', Rule::in(['Europe/Berlin'])],
             'defaultLocale' => ['required', Rule::in(config('merlin.registration.supported_locales'))],
         ];
+    }
+
+    /**
+     * Ordnet Validierungsfehler dem fachlich passenden Tab zu; allgemeine Stammdaten
+     * haben Vorrang, wenn mehrere Bereiche gleichzeitig unvollständig sind.
+     *
+     * @param  array<int, string>  $fields
+     */
+    private function tabForValidationErrors(array $fields): string
+    {
+        $generalFields = array_keys($this->generalRules());
+
+        return collect($fields)->contains(
+            fn (string $field): bool => in_array($field, $generalFields, true),
+        ) ? 'general' : 'address';
     }
 
     /** @return array<string, string> */
