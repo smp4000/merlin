@@ -41,6 +41,14 @@ return [
         'aria_label' => 'Aktiver Betrieb',
         'active' => 'Aktiver Betrieb',
         'change' => 'Wechseln',
+        'change_partner' => 'Partner wechseln',
+    ],
+    'station_switcher' => [
+        'aria_label' => 'Aktive Arbeitstankstelle',
+        'active' => 'Aktive Tankstelle',
+        'missing' => 'Keine Tankstelle gewählt',
+        'select' => 'Tankstelle auswählen',
+        'change' => 'Wechseln',
     ],
     'platform_dashboard' => [
         'navigation_label' => 'Plattformübersicht',

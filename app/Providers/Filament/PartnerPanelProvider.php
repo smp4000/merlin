@@ -6,7 +6,9 @@ use App\Enums\ThemePalette;
 use App\Filament\AvatarProviders\InitialsAvatarProvider;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
+use App\Filament\Pages\StationSelection;
 use App\Foundation\Settings\TenantTheme;
+use App\Foundation\Stations\ActiveStationContext;
 use App\Foundation\Tenancy\AccessibleTenantMemberships;
 use App\Foundation\Tenancy\TenantContext;
 use App\Http\Middleware\EnsureActiveTenantContext;
@@ -88,8 +90,17 @@ final class PartnerPanelProvider extends PanelProvider
                         ->limit(2)
                         ->get()
                         ->count();
+                    $stationContext = app(ActiveStationContext::class);
+                    $activeStation = $stationContext->current($context);
+                    $activeStationCount = $stationContext->activeCount($context);
 
-                    return view('filament.components.tenant-switcher', compact('context', 'membershipCount'));
+                    return view('filament.components.tenant-switcher', [
+                        'context' => $context,
+                        'membershipCount' => $membershipCount,
+                        'activeStation' => $activeStation,
+                        'activeStationCount' => $activeStationCount,
+                        'stationSelectionUrl' => StationSelection::getUrl(),
+                    ]);
                 },
             )
             ->middleware([

@@ -120,6 +120,19 @@ Entwurf → optional zur Prüfung → aktiv → ersetzt / geschlossen
 6. Validierung und Duplikatwarnung prüfen Adresse, GLN und externe Nummern.
 7. Partner bestätigt die Zusammenfassung und aktiviert die Station.
 
+Die fachliche Aktivierung und die aktuelle Arbeitstankstelle sind zwei getrennte
+Zustände: Ein Partner kann mehrere aktive Stationen betreiben. Bei mehreren aktiven
+Stationen wählt der Benutzer zusätzlich bewusst einen Stationskontext für operative
+Module; bei genau einer aktiven Station wird dieser Kontext vorausgewählt. Ein
+Tenantwechsel verwirft die Stationsauswahl. Entwürfe und geschlossene Stationen können
+nicht als Arbeitstankstelle gewählt werden.
+
+Solange das versionierte Öffnungszeiten-Teilmodul noch nicht implementiert ist, prüft
+die Aktivierung die verfügbaren Grunddaten (Betreiber, Brand, Name, Anschrift, Region,
+Land, Sprache und Zeitzone). Die Aktivierungsregel wird mit Einführung der Öffnungszeiten
+versioniert erweitert; bestehende aktive Onboarding-Stationen werden dabei nicht
+stillschweigend zurückgestuft.
+
 Duplikate werden nur vorgeschlagen, nie automatisch zusammengeführt. Änderungen führen
 Gültigkeit, Quelle, Grund, Akteur und gegebenenfalls Freigeber. Kritische Änderungen an
 Betreiber, Brand, GLN, Steuer-/Behördenkennungen, Eigentumsmodell oder Schließung können

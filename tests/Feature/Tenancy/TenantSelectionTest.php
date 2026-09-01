@@ -30,7 +30,8 @@ final class TenantSelectionTest extends TestCase
             ->get('/admin/dashboard')
             ->assertOk()
             ->assertSee('Betrieb Nord')
-            ->assertSee('Aktiver Betrieb')
+            ->assertSee('Keine Tankstelle gewählt')
+            ->assertSee('Tankstelle auswählen')
             ->assertSessionHas(TenantContextSession::SESSION_KEY, $tenant->public_id);
     }
 

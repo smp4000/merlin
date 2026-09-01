@@ -55,6 +55,28 @@
                             <a class="merlin-primary-button" href="{{ \App\Filament\Pages\StationEdit::getUrl(['station' => $station->public_id]) }}" wire:navigate>
                                 {{ __('stations.actions.edit') }}
                             </a>
+                            @if (in_array($station->status, ['draft', 'review'], true))
+                                <button
+                                    class="merlin-secondary-button"
+                                    type="button"
+                                    wire:click="activate('{{ $station->public_id }}')"
+                                    wire:confirm="{{ __('stations.activation.confirm', ['station' => $station->name]) }}"
+                                    wire:loading.attr="disabled"
+                                >
+                                    {{ __('stations.actions.activate') }}
+                                </button>
+                            @elseif ($station->status === 'active' && $activeStationPublicId !== $station->public_id)
+                                <button
+                                    class="merlin-secondary-button"
+                                    type="button"
+                                    wire:click="selectForWork('{{ $station->public_id }}')"
+                                    wire:loading.attr="disabled"
+                                >
+                                    {{ __('stations.actions.select_for_work') }}
+                                </button>
+                            @elseif ($station->status === 'active')
+                                <span class="merlin-linked-note">{{ __('stations.selection.current') }}</span>
+                            @endif
                             @if ($station->sourceReferences->isEmpty())
                                 <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
                                     {{ __('stations.actions.link_directory') }}
@@ -104,6 +126,28 @@
                                         <a class="merlin-primary-button" href="{{ \App\Filament\Pages\StationEdit::getUrl(['station' => $station->public_id]) }}" wire:navigate>
                                             {{ __('stations.actions.edit') }}
                                         </a>
+                                        @if (in_array($station->status, ['draft', 'review'], true))
+                                            <button
+                                                class="merlin-secondary-button"
+                                                type="button"
+                                                wire:click="activate('{{ $station->public_id }}')"
+                                                wire:confirm="{{ __('stations.activation.confirm', ['station' => $station->name]) }}"
+                                                wire:loading.attr="disabled"
+                                            >
+                                                {{ __('stations.actions.activate') }}
+                                            </button>
+                                        @elseif ($station->status === 'active' && $activeStationPublicId !== $station->public_id)
+                                            <button
+                                                class="merlin-secondary-button"
+                                                type="button"
+                                                wire:click="selectForWork('{{ $station->public_id }}')"
+                                                wire:loading.attr="disabled"
+                                            >
+                                                {{ __('stations.actions.select_for_work') }}
+                                            </button>
+                                        @elseif ($station->status === 'active')
+                                            <span class="merlin-linked-note">{{ __('stations.selection.current') }}</span>
+                                        @endif
                                         @if ($station->sourceReferences->isEmpty())
                                             <a class="merlin-secondary-button" href="{{ \App\Filament\Pages\StationCreate::getUrl(['station' => $station->public_id]) }}" wire:navigate>
                                                 {{ __('stations.actions.link_short') }}
